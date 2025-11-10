@@ -15,7 +15,7 @@ Robo_Junior::Robo_Junior(float xi, float yi) : Inimigo(xi, yi), volta(1), ALCANC
 
 	if (pGG)
 	{
-		sf::Texture* tex = pGG->getTextura("C:/testegitjogo/testegitjogo-main/Imagens/inimigo_facil.png");
+		sf::Texture* tex = pGG->getTextura("Imagens/inimigo_facil.png");
 		if (tex)
 		{
 			pFigura->setTexture(*tex);

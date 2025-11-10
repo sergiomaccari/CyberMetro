@@ -13,11 +13,14 @@ namespace Fases {
 	protected:
 		Jogador* pJogador1;
 		Jogador* pJogador2;
-
 		ListaEntidades* pListaInimigos;
 		ListaEntidades* pListaObstaculos;
 		Gerenciador_Colisoes* pColisoes;
-
+		std::vector<sf::Vector2f> posi_robo_junior;
+		std::vector<sf::Vector2f> posi_plataforma;
+		const int TILESET_LARGURA_EM_BLOCOS = 8;
+		const float TAMANHO_BLOCO_X = 32.0f;
+		const float TAMANHO_BLOCO_Y = 32.0f;
 		void criarRoboJunior(float x, float y);
 		void criarRoboJunior(const sf::Vector2f& pos);
 		void criarPlataforma(float x, float y);

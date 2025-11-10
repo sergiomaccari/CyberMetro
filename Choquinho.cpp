@@ -11,7 +11,7 @@ namespace Obstaculos {
 
 		if (pGG)
 		{
-			sf::Texture* tex = pGG->getTextura("C:/testegitjogo/testegitjogo-main/Imagens/obstaculo_dificil.png");
+			sf::Texture* tex = pGG->getTextura("Imagens/obstaculo_dificil.png");
 			if (tex)
 			{
 				pFigura->setTexture(*tex);

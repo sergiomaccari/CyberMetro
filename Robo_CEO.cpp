@@ -8,7 +8,7 @@ namespace Personagens {
         forca(rand() % 10 + 1),
         pJogador(nullptr),
         cooldownTiro(COOLDOWN_TIRO_CHEFE),
-        PROJETIL_VELOCIDADE_CHEFE(0.7f + 0.03f * (float)forca),
+        PROJETIL_VELOCIDADE_CHEFE(1.2f + 0.03f * (float)forca), //alterei pra exibir
         COOLDOWN_TIRO_CHEFE(540 - 60 / forca),
         FORCA_GRAVIDADE_CHEFE(-0.0249f)
     {

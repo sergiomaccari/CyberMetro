@@ -7,7 +7,7 @@ namespace Obstaculos
     Gelinho::Gelinho(float xi, float yi) : Obstaculo(xi, yi), largura(100.0f) {
         if (pGG)
         {
-            sf::Texture* tex = pGG->getTextura("C:/testegitjogo/testegitjogo-main/Imagens/obstaculo_medio.png");
+            sf::Texture* tex = pGG->getTextura("Imagens/obstaculo_medio.png");
             if (tex)
             {
                 pFigura->setTexture(*tex);

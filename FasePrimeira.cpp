@@ -13,14 +13,14 @@ using namespace Personagens;
 namespace Fases {
 
 	FasePrimeira::FasePrimeira(Jogador* jogador1, Jogador* jogador2)
-		: Fase(jogador1, jogador2) 
+		: Fase(jogador1, jogador2)
 	{
 		if (!texturaTileset.loadFromFile("cyberpunk_floor_tiles_256x256_v3.png"))
 		{
 			std::cerr << "Erro: Nao foi possivel carregar o tileset " << std::endl;
 		}
 
-		posi_robo_junior = { {2336, 800}, {2336, 288}, {480, 600}, {480, 802} };
+		posi_robo_junior = { {2336, 700}, {2336, 288}, {480, 600}, {480, 700} };
 		posi_robo_senior = { {1280, 550}, {2336, 600}, {2336, 298}, {1600, 550} };
 		posi_plataforma = { {1344, 704}, {2304, 416}, {2336, 416}, {2368, 416} };
 		posi_gelinho = { {1536, 608}, {1568, 608}, {1600, 608}, {1632, 608} };
@@ -33,18 +33,18 @@ namespace Fases {
 
 	void FasePrimeira::criarInimigos()
 	{
-		criarRoboJunior(608, 600);
-		criarRoboJunior(640, 600);
-		criarRoboJunior(2336, 600);
+		criarRoboJunior(1600, 64);
+		criarRoboJunior(1600, 360);
+		criarRoboJunior(1900, 64);
 
 		criarRoboSenior(700, 600);
 		criarRoboSenior(160, 700);
-		criarRoboSenior(160, 600);;
+		criarRoboSenior(160, 600);
 
-		int na = rand() % 5; 
+		int na = rand() % 5;
 
 		for (int i = 0; i < na; ++i) {
-			int j = rand() % 4;      
+			int j = rand() % 4;
 			int k = rand() % 4;
 			sf::Vector2f posIF = posi_robo_junior[j];
 			sf::Vector2f posIM = posi_robo_senior[k];
@@ -67,8 +67,6 @@ namespace Fases {
 			criarGelinho(posi_gelinho[i].x, posi_gelinho[i].y);
 			criarPlataforma(posi_plataforma[i].x, posi_plataforma[i].y);
 		}
-
-		// criarObstaculoDificil(1000, 700);
 	}
 
 	void FasePrimeira::criarMapa()
@@ -122,7 +120,7 @@ namespace Fases {
 		Gerenciador_Grafico* pGG = Ente::getGerenciadorGrafico();
 		if (!pGG || !pGG->getJanela()) return;
 
-		const int tilesetCols = texturaTileset.getSize().x / TAMANHO_BLOCO_X;
+		const int tilesetCols = texturaTileset.getSize().x / (int)TAMANHO_BLOCO_X;
 
 		for (int y = 0; y < (int)gridMapa.size(); ++y)
 		{
@@ -133,11 +131,11 @@ namespace Fases {
 					continue;
 
 				int idAjustado = id - 1;
-				int tileX = (idAjustado % tilesetCols) * TAMANHO_BLOCO_X;
-				int tileY = (idAjustado / tilesetCols) * TAMANHO_BLOCO_Y;
+				int tileX = (idAjustado % tilesetCols) * (int)TAMANHO_BLOCO_X;
+				int tileY = (idAjustado / tilesetCols) * (int)TAMANHO_BLOCO_Y;
 
 				sf::Sprite tile(texturaTileset);
-				tile.setTextureRect(sf::IntRect(tileX, tileY, TAMANHO_BLOCO_X, TAMANHO_BLOCO_Y));
+				tile.setTextureRect(sf::IntRect(tileX, tileY, (int)TAMANHO_BLOCO_X, (int)TAMANHO_BLOCO_Y));
 				tile.setPosition(x * TAMANHO_BLOCO_X, y * TAMANHO_BLOCO_Y);
 
 				pGG->getJanela()->draw(tile);
@@ -166,7 +164,7 @@ namespace Fases {
 		pListaObstaculos->inserir(obst);
 	}
 
-	void FasePrimeira::criarObstaculoDificil(float x, float y)
+	void FasePrimeira::criarChoquinho(float x, float y)
 	{
 		Gerenciador_Grafico* pGG_local = Ente::getGerenciadorGrafico();
 		if (!pGG_local) return;

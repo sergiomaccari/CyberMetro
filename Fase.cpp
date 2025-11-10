@@ -255,6 +255,12 @@ namespace Fases {
 		pListaObstaculos->inserir(chao);
 	}
 
-	void Fase::desenharMapa() {}
-	void Fase::criarMapa() {}
+	void Fase::desenharMapa() 
+	{
+	
+	}
+	void Fase::criarMapa() 
+	{
+	
+	}
 }

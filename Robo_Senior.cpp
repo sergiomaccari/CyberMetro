@@ -14,7 +14,7 @@ namespace Personagens {
         this->n_vidas = 2;
         if (pGG)
         {
-            sf::Texture* tex = pGG->getTextura("C:/testegitjogo/testegitjogo-main/Imagens/inimigo_medio.png");
+            sf::Texture* tex = pGG->getTextura("Imagens/inimigo_medio.png");
             if (tex)
             {
                 pFigura->setTexture(*tex);

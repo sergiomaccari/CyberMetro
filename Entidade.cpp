@@ -4,7 +4,7 @@ namespace Entidades
 {
     const float Entidade::grav = 0.025f;
 
-	Entidade::Entidade(float xi, float yi) : x(xi), y(yi), estaAtivo(true), vel_grav(0)
+    Entidade::Entidade(float xi, float yi) : x(xi), y(yi), estaAtivo(true), vel_grav(0)
     {
 
     }
@@ -33,6 +33,7 @@ namespace Entidades
         {
             return this->pFigura->getPosition();
         }
+        return sf::Vector2f(0.f, 0.f);
     }
 
     void Entidade::setX(float novoX)
@@ -75,11 +76,11 @@ namespace Entidades
         return vel_grav;
     }
 
-	void Entidade::gravidade(sf::Vector2f* pos)
-	{
-		vel_grav += grav;
-		*pos += sf::Vector2f(0.0f, vel_grav);
-	}
+    void Entidade::gravidade(sf::Vector2f* pos)
+    {
+        vel_grav += grav;
+        *pos += sf::Vector2f(0.0f, vel_grav);
+    }
 
     void Entidade::setPosicaoGrafica(const sf::Vector2f& novaPos)
     {
