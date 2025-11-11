@@ -1,25 +1,28 @@
 #include "Jogador.h"
 #include "Projetil.h"
-
+// include "Fase.h" removido
+// include <cmath> removido
 
 using namespace Entidades;
 namespace Personagens
 {
 	const float Jogador::PROJETIL_VELOCIDADE_JOGADOR = 3.0f;
+	// constantes de buff removidas
 
 	Jogador::Jogador(int numJogador) :
+		Personagem(), // chamada ao construtor padrao de Entidade
 		pontos(0),
 		cooldown(0),
 		playerNum(numJogador),
 		ultimaDirecaoX(1.0f),
 		estaNoChao(false),
-		stun(sf::Time::Zero), 
-		obstaculoCooldown(sf::Time::Zero) 
+		stun(sf::Time::Zero),
+		obstaculoCooldown(sf::Time::Zero)
 	{
 		this->x = 32;//inicializado uma pos padrao nessa construtora
 		this->y = 32;
 		this->velocidade = 300.0f;
-		this->n_vidas = 1000;
+		this->n_vidas = 1000000;//testes
 
 		std::string caminhoTextura = (playerNum == 1) ? "Imagens/jogador1.png" : "Imagens/jogador2.png";
 
@@ -50,10 +53,11 @@ namespace Personagens
 		playerNum(numJogador),
 		ultimaDirecaoX(1.0f),
 		estaNoChao(false),
-		stun(sf::Time::Zero), 
-		obstaculoCooldown(sf::Time::Zero) 
+		stun(sf::Time::Zero),
+		obstaculoCooldown(sf::Time::Zero)
+		// inicializacao de pFaseAtual e buffAtivo removida
 	{
-		
+
 	}
 
 
@@ -61,6 +65,10 @@ namespace Personagens
 	{
 		movimento = sf::Vector2f(0.0f, 0.0f);
 	}
+
+	// metodo setFase removido
+	// metodos verificarBuffs e estaPertoDeChefe removidos
+
 
 	void Jogador::mover()
 	{
@@ -92,7 +100,7 @@ namespace Personagens
 			return;
 		}
 
-		if (playerNum == 1) 
+		if (playerNum == 1)
 		{
 			if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) //+y
 				movimento += sf::Vector2f(0.0f, -1.0f);
@@ -137,13 +145,14 @@ namespace Personagens
 	{
 		if (this->getAtivo())
 		{
+			// chamada de verificarBuffs removida
 			this->mover();
 			this->atirar();
 		}
 		projeteis.executar();
 	}
 
-	void Jogador::salvar() 
+	void Jogador::salvar()
 	{
 
 	}
@@ -157,6 +166,8 @@ namespace Personagens
 			tiroPressionado = true;
 		else if (playerNum == 2 && sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
 			tiroPressionado = true;
+
+		// logica de buff removida
 
 
 		if (tiroPressionado && cooldown == 0) {
@@ -182,10 +193,12 @@ namespace Personagens
 			novoProjetil->setX(spawnX);
 			novoProjetil->setY(y + 7.5f);
 
+			// usa a velocidade padrao
 			novoProjetil->setVelocidade(PROJETIL_VELOCIDADE_JOGADOR * ultimaDirecaoX, 0.0f);
 
 			novoProjetil->setDoBem(true);
 			projeteis.inserir(novoProjetil);
+			// usa o cooldown padrao
 			cooldown = 120;
 		}
 	}

@@ -11,7 +11,7 @@ ListaEntidades::ListaEntidades() {}
 
 ListaEntidades::~ListaEntidades()
 {
-    Elemento<Entidade>* cur = LEs.getPrimeiro();
+    auto cur = LEs.getPrimeiro();
     while (cur)
     {
         if (cur->getInfo())
@@ -40,7 +40,7 @@ Lista<Entidades::Entidade>* ListaEntidades::getLista()
     return &LEs;
 }
 
-Elemento<Entidades::Entidade>* ListaEntidades::getPrimeiro() const
+typename Lista<Entidades::Entidade>::Elemento* ListaEntidades::getPrimeiro() const
 {
     return LEs.getPrimeiro();
 }
@@ -48,11 +48,11 @@ Elemento<Entidades::Entidade>* ListaEntidades::getPrimeiro() const
 
 void ListaEntidades::executar()
 {
-    Elemento<Entidade>* cur = LEs.getPrimeiro();
+    auto cur = LEs.getPrimeiro();
     while (cur)
     {
         Entidade* pEnt = cur->getInfo();
-        Elemento<Entidade>* proximo = cur->getProx();
+        auto proximo = cur->getProx();
         if (pEnt->getAtivo() == false)
         {
             LEs.remover(pEnt);
@@ -69,15 +69,14 @@ void ListaEntidades::executar()
 
 void ListaEntidades::desenhar()
 {
-    Elemento<Entidade>* cur = LEs.getPrimeiro();
+    auto cur = LEs.getPrimeiro();
     while (cur)
     {
         Entidade* pEnt = cur->getInfo();
         if (pEnt && pEnt->getAtivo())
         {
-            Obstaculos::Obstaculo* pObs = dynamic_cast<Obstaculos::Obstaculo*>(pEnt);
             Entidades::Chao* pChao = dynamic_cast<Entidades::Chao*>(pEnt);
-            if ((!pObs && !pChao) || (pObs && pObs->getMovel()))
+            if (!pChao)
             {
                 pEnt->desenhar();
             }

@@ -15,11 +15,12 @@ namespace Entidades
 
     public:
         Projetil();
-        virtual ~Projetil();
+        ~Projetil();
         virtual void executar();
         virtual void salvar();
         void setVelocidade(float velX, float velY);
         void setDoBem(bool b);
         bool getDoBem() const;
+		int getDano() const;
     };
 }

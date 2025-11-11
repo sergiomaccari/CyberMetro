@@ -10,13 +10,11 @@ namespace Obstaculos
     {
     protected:
         bool danoso;
-        bool isMovel;
 
     public:
         Obstaculo(float xi, float yi);
         virtual ~Obstaculo();
         virtual void obstaculizar(Jogador* pj) = 0;
         bool getDanoso() const;
-        bool getMovel() const;
     };
 }

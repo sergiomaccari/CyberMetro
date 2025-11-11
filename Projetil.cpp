@@ -49,4 +49,9 @@ namespace Entidades
 	{
 		return DoBem;
 	}
+
+	int Projetil::getDano() const
+	{
+		return dano;
+	}
 }

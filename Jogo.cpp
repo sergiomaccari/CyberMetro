@@ -1,6 +1,7 @@
 #include "Jogo.h"
 #include "FasePrimeira.h" 
 #include "FaseSegunda.h"  
+#include "Gerenciador_Grafico.h" // necessario para MUNDO_X_MAX
 
 Jogo::Jogo()
     : gg(),
@@ -47,6 +48,10 @@ void Jogo::configurarNovaFase(EstadoJogo novoEstado)
     {
         faseAtual = new Fases::FaseSegunda(pJogador1, pJogador2);
     }
+
+    if (faseAtual) {
+        faseAtual->setJogo(this);
+    }
 }
 
 void Jogo::limparFaseAtual()
@@ -89,16 +94,22 @@ void Jogo::executar()
 
             if (pJogador2->getAtivo() == false && sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
             {
-                std::cout << "Jogador 2 spawnnado" << std::endl;
+                // so podemos spawnar p2 perto do p1 se o p1 existir
+                if (pJogador1)
+                {
+                    std::cout << "Jogador 2 spawnnado" << std::endl;
 
-                pJogador2->setAtivo(true);
-                pJogador2->setX(100.0f);
-                pJogador2->setY(450.0f);
-                pJogador2->setPosicaoGrafica(pJogador2->getX(), pJogador2->getY());
-                pJogador2->setGerenciadorGrafico(&gg);
+                    pJogador2->setAtivo(true);
+                    pJogador2->setX(pJogador1->getX());
+                    pJogador2->setY(pJogador1->getY());
+                    pJogador2->setVel_Grav(0.0f);
 
-                if (faseAtual) {
-                    faseAtual->adicionarJogador2(pJogador2);
+                    pJogador2->setPosicaoGrafica(pJogador2->getX(), pJogador2->getY());
+                    pJogador2->setGerenciadorGrafico(&gg);
+
+                    if (faseAtual) {
+                        faseAtual->adicionarJogador2(pJogador2);
+                    }
                 }
             }
 
@@ -109,4 +120,3 @@ void Jogo::executar()
         }
     }
 }
-

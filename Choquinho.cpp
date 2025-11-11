@@ -15,7 +15,7 @@ namespace Obstaculos {
 			if (tex)
 			{
 				pFigura->setTexture(*tex);
-				pFigura->setScale(96.0f / tex->getSize().x, 32.0f / tex->getSize().y);
+				pFigura->setScale(32.0f / tex->getSize().x, 32.0f / tex->getSize().y);
 			}
 		}
 		else
@@ -29,7 +29,6 @@ namespace Obstaculos {
 		setPosicaoGrafica(this->x, this->y);
 
 		this->danoso = true;
-		this->isMovel = true;
 	}
 
 	Choquinho::~Choquinho()
@@ -44,7 +43,7 @@ namespace Obstaculos {
 			for (int i = 0; i < danosidade; i++) {
 				pj->operator--();
 			}
-			pj->trava_mov(1.0f /(float) danosidade); // stun
+			pj->trava_mov(1.0f /(float) danosidade); // stun, quanto maior o dano menor o stunt
 
 			pj->iniciarObstaculoCooldown(sf::seconds(1.0f));// cooldown
 		}

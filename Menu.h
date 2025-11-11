@@ -13,7 +13,23 @@ class Menu : public Ente
 {
 private:
     sf::Font fonte;
-    std::vector<sf::Text> opcoes;
+
+    enum class MenuNivel 
+    { 
+        PRINCIPAL, 
+        FASE1, 
+        FASE2 
+    };
+    MenuNivel nivelAtual;
+
+    // opcoes
+    std::vector<sf::Text> opcoesPrincipal;
+    std::vector<sf::Text> opcoesFase1;
+    std::vector<sf::Text> opcoesFase2;
+
+    // para o vetor ativo
+    std::vector<sf::Text>* pOpcoesAtuais;
+
     int indiceOpcaoSelecionada;
 
     const sf::Color COR_SELECIONADA = sf::Color::Yellow;
@@ -26,6 +42,11 @@ private:
     void configurarOpcoes();
     void desenharOpcoes();
     void processarEntrada(sf::Event& evento);
+
+    // Funcoes auxiliares para o novo menu, acho que ajuda mas nao sao essenciais
+    void atualizarDestaque();
+    void setNivelMenu(MenuNivel novoNivel, int novoIndice = 0);
+    void posicionarTextos(std::vector<sf::Text>& textos);
 
 public:
     Menu();

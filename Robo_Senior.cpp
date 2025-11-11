@@ -5,12 +5,20 @@
 
 namespace Personagens {
 
-    Robo_Senior::Robo_Senior(float xi, float yi) : Inimigo(xi, yi), tamanho((rand() % 12) + 42), volta(1), ALCANCE(70)
+    // v = sqrt(2 * g * h) // v = sqrt(2 * 0.025 * 32.0) = sqrt(1.6)
+    // 0.025 eh o 'grav' de Entidade.h
+    const float Robo_Senior::ALTURA_PULO = 32.0f;
+    const float Robo_Senior::FORCA_PULO = -1.264911064f; // negativo eh para cima
+
+    Robo_Senior::Robo_Senior(float xi, float yi) :
+        Inimigo(xi, yi),
+        tamanho((rand() % 12) + 42),
+        estaNoChao(true) // comeca no chao
     {
         this->xINI = xi;
         this->x = xi;
         this->y = yi;
-        this->velocidade = 300.0f;
+        this->velocidade = 300.0f; // nao eh mais usado no movimento
         this->n_vidas = 2;
         if (pGG)
         {
@@ -38,31 +46,23 @@ namespace Personagens {
 
     void Robo_Senior::mover()
     {
-        sf::Vector2f movimento = sf::Vector2f(0.0f, 0.0f);
+        // essa logica nao usa mais o vetor 'movimento' nem a 'velocidade'
+        // ela aplica a gravidade diretamente no 'y'
+        // essa eh a gravidade que eu quero implementar pra todo mundo
         tempo = clock.restart();
-
-        if (volta == 1 && this->x >= xINI + ALCANCE) {
-            volta = -1;
-        }
-        else if (volta == -1 && this->x <= xINI) {
-            volta = 1;
-        }
-
-        if (this->x <= x + ALCANCE && volta == 1)
+        if (vel_grav == 0.0f)
         {
-            movimento += sf::Vector2f(1.0f, 0.f);
-
+            estaNoChao = true;
         }
-
-        if (this->x >= x && volta == -1)
+        if (estaNoChao)
         {
-            movimento += sf::Vector2f(-1.0f, 0.f);
+            vel_grav = FORCA_PULO;
+            estaNoChao = false;
         }
+        vel_grav += grav;
+        this->y += vel_grav;
 
-        Personagem::gravidade(&movimento);
-
-        this->x += movimento.x * tempo.asSeconds() * velocidade;
-        this->y += movimento.y * tempo.asSeconds() * velocidade;
+        this->x = xINI;
 
         setPosicaoGrafica(this->x, this->y);
     }
@@ -85,9 +85,9 @@ namespace Personagens {
         this->mover();
         if (tempoCura.getElapsedTime() > intervaloCura)
         {
-			if (this->n_vidas < 2){//PRESUMINDO QUE N VIDAS MENOR QUE 2, A CONSTANTE QUE LIMITE É A VIDA TOTAL
-				Personagem::operator++();
-			}
+            if (this->n_vidas < 2) {//PRESUMINDO QUE N VIDAS MENOR QUE 2, A CONSTANTE QUE LIMITE É A VIDA TOTAL, TALVEZ IMPLEMENTAR ALGO COMO UM GETTER
+                Personagem::operator++();
+            }
             tempoCura.restart();
         }
     }

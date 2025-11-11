@@ -8,47 +8,140 @@
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
+#include <algorithm> // para std::swap e std::min
+#include <cstdlib>   // para rand()
 
 using json = nlohmann::json;
 using namespace Personagens;
 
 namespace Fases {
+
+    // Definicao das constantes
+    const int FaseSegunda::MIN_JUNIOR = 3;
+    const int FaseSegunda::MAX_JUNIOR = 5;
+    const int FaseSegunda::MIN_CEO = 3;
+    const int FaseSegunda::MAX_CEO = 5;
+    const int FaseSegunda::MIN_PLATAFORMA = 3;
+    const int FaseSegunda::MAX_PLATAFORMA = 5;
+    const int FaseSegunda::MIN_CHOQUINHO = 3;
+    const int FaseSegunda::MAX_CHOQUINHO = 5;
+
+
     FaseSegunda::FaseSegunda(Jogador* jogador1, Jogador* jogador2)
         : Fase(jogador1, jogador2)
     {
+        // --- LOGICA DE SPAWN ADICIONADA AQUI ---
+        if (pJogador1) {
+            pJogador1->setX(32 * 2); // Posicao da Fase 2
+            pJogador1->setY(32 * 24);
+            pJogador1->setPosicaoGrafica(pJogador1->getX(), pJogador1->getY());
+        }
+        if (pJogador2 && pJogador2->getAtivo()) {
+            pJogador2->setX(pJogador1->getX() + 50.0f); // Perto do P1
+            pJogador2->setY(pJogador1->getY());
+            pJogador2->setPosicaoGrafica(pJogador2->getX(), pJogador2->getY());
+        }
+        // --- FIM DA LOGICA DE SPAWN ---
+
         if (!texturaTileset.loadFromFile("cyberpunk_floor_tiles_256x256_v3.png"))
         {
-            std::cerr << "Erro: Nao foi possivel carregar o tileset " << std::endl;
+            std::cerr << "Erro:nao carregou o tileset " << std::endl;
         }
 
-        posi_robo_junior = { {1000, 500}, {1200, 400} };
-        posi_choquinho = { {1500, 550}, {1600, 550} };
-        posi_ceo = { {2000, 400} };
+        // --- CARREGA VETORES DE SPAWN ---
+        // (descomentando e usando os vetores herdados e proprios)
+        posi_ceo = {
+            {3200 - (32 * 11), 32 * 10}, {3200 - (32 * 11), 32 * 15}, {3200 - (32 * 11), 32 * 20},
+            {3200 - (32 * 11), 32 * 25}, {32 * 28, 32 * 25}
+        };
+
+        posi_robo_junior = {
+            {32 * 37, 32 * 1}, {32 * 41, 32 * 1}, {32 * 47, 32 * 1}, {32 * 53, 32 * 1},
+            {32 * 59, 32 * 1}, {32 * 65, 32 * 1}, {32 * 71, 32 * 1}, {32 * 77, 32 * 1},
+            {32 * 83, 32 * 1}, {32 * 89, 32 * 1}, {32 * 95, 32 * 1}, {32 * 6, 32 * 2},
+            {32 * 11, 32 * 2}, {32 * 18, 32 * 2}, {32 * 41, 32 * 6}, {32 * 47, 32 * 6},
+            {32 * 53, 32 * 6}, {32 * 59, 32 * 6}, {32 * 65, 32 * 6}, {32 * 71, 32 * 6},
+            {32 * 77, 32 * 6}, {32 * 83, 32 * 6}, {32 * 89, 32 * 6}, {32 * 95, 32 * 6},
+            {32 * 11, 32 * 7}, {32 * 15, 32 * 7}, {32 * 21, 32 * 7}, {32 * 37, 32 * 11},
+            {32 * 41, 32 * 11}, {32 * 47, 32 * 11}, {32 * 11, 32 * 12}, {32 * 15, 32 * 12},
+            {32 * 21, 32 * 12}, {32 * 39, 32 * 16}, {32 * 51, 32 * 16}, {32 * 57, 32 * 16},
+            {32 * 11, 32 * 17}, {32 * 15, 32 * 17}, {32 * 21, 32 * 17}, {32 * 37, 32 * 21},
+            {32 * 49, 32 * 21}, {32 * 41, 32 * 26}, {32 * 47, 32 * 26}, {32 * 71, 32 * 26}
+        };
+
+        posi_plataforma = {
+            {32 * 3, 32 * 14, 13 * 32}, {32 * 32, 32 * 14, 13 * 32}, {32 * 34, 32 * 14, 13 * 32},
+            {32 * 65, 32 * 18, 9 * 32}, {32 * 67, 32 * 18, 9 * 32}
+        };
+
+        posi_choquinho = {
+            {32 * 45, 32 * 1}, {32 * 57, 32 * 1}, {32 * 69, 32 * 1}, {32 * 81, 32 * 1},
+            {32 * 93, 32 * 1}, {32 * 16, 32 * 2}, {32 * 26, 32 * 2}, {32 * 45, 32 * 6},
+            {32 * 57, 32 * 6}, {32 * 69, 32 * 6}, {32 * 81, 32 * 6}, {32 * 93, 32 * 6},
+            {32 * 9, 32 * 7}, {32 * 26, 32 * 7}, {32 * 49, 32 * 11}, {32 * 9, 32 * 12},
+            {32 * 26, 32 * 12}, {32 * 49, 32 * 16}, {32 * 55, 32 * 16}, {32 * 9, 32 * 17},
+            {32 * 26, 32 * 17}, {32 * 47, 32 * 21}, {32 * 55, 32 * 21}, {32 * 9, 32 * 26}
+        };
 
         criarObstaculos();
         criarInimigos();
     }
 
-    FaseSegunda::~FaseSegunda() 
+    FaseSegunda::~FaseSegunda()
     {
-    
+
     }
 
     void FaseSegunda::criarInimigos()
     {
-        criarRoboCEO(3200 - (32*10), 32*9);
-		criarRoboCEO(3200 - (32*9), 32*14);
-        criarRoboCEO(3200 - (32*9), 32*19);
-        criarRoboCEO(3200 - (32*9), 32*24);
+        int totalPosJuniors = posi_robo_junior.size();
+        int numJuniors = MIN_JUNIOR + (rand() % (MAX_JUNIOR - MIN_JUNIOR + 1));
+        numJuniors = std::min(numJuniors, totalPosJuniors);
 
+        for (int i = 0; i < numJuniors; ++i) {
+            int j = i + (rand() % (totalPosJuniors - i));
+            std::swap(posi_robo_junior[i], posi_robo_junior[j]);
+            criarRoboJunior(posi_robo_junior[i].x, posi_robo_junior[i].y);
+        }
+
+        // --- LOGICA DE SPAWN ALEATORIO PARA ROBO CEO ---
+        int totalPosCeos = posi_ceo.size();
+        int numCeos = MIN_CEO + (rand() % (MAX_CEO - MIN_CEO + 1));
+        numCeos = std::min(numCeos, totalPosCeos);
+
+        for (int i = 0; i < numCeos; ++i) {
+            int j = i + (rand() % (totalPosCeos - i));
+            std::swap(posi_ceo[i], posi_ceo[j]);
+            criarRoboCEO(posi_ceo[i].x, posi_ceo[i].y);
+        }
     }
 
     void FaseSegunda::criarObstaculos()
     {
         criarMapa();
 
-        for (const auto& pos : posi_choquinho) {
-            criarChoquinho(pos.x, pos.y);
+        // --- LOGICA DE SPAWN ALEATORIO PARA PLATAFORMA (HERDADO) ---
+        int totalPosPlataformas = posi_plataforma.size();
+        int numPlataformas = MIN_PLATAFORMA + (rand() % (MAX_PLATAFORMA - MIN_PLATAFORMA + 1));
+        numPlataformas = std::min(numPlataformas, totalPosPlataformas);
+
+        for (int i = 0; i < numPlataformas; ++i) {
+            int j = i + (rand() % (totalPosPlataformas - i));
+            std::swap(posi_plataforma[i], posi_plataforma[j]);
+
+            sf::Vector3f& spawn = posi_plataforma[i];
+            criarPlataforma(spawn.x, spawn.y, (int)spawn.z);
+        }
+
+        // --- LOGICA DE SPAWN ALEATORIO PARA CHOQUINHO ---
+        int totalPosChoquinhos = posi_choquinho.size();
+        int numChoquinhos = MIN_CHOQUINHO + (rand() % (MAX_CHOQUINHO - MIN_CHOQUINHO + 1));
+        numChoquinhos = std::min(numChoquinhos, totalPosChoquinhos);
+
+        for (int i = 0; i < numChoquinhos; ++i) {
+            int j = i + (rand() % (totalPosChoquinhos - i));
+            std::swap(posi_choquinho[i], posi_choquinho[j]);
+            criarChoquinho(posi_choquinho[i].x, posi_choquinho[i].y);
         }
     }
 
@@ -56,7 +149,7 @@ namespace Fases {
     {
         std::ifstream file("tiledcyberSeg.json");
         if (!file.is_open()) {
-            std::cerr << "Erro: Nao foi possivel abrir 'tiledcyberSeg.json'" << std::endl;
+            std::cerr << "Erro: nao abriu 'tiledcyberSeg.json'" << std::endl;
             return;
         }
 
@@ -146,6 +239,5 @@ namespace Fases {
         obst->setGerenciadorGrafico(pGG_local);
         pListaObstaculos->inserir(obst);
     }
-
 
 }

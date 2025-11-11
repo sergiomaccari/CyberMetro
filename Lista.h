@@ -4,40 +4,50 @@
 
 
 template<typename T>
-class Elemento
-{
-private:
-    T* pInfo;
-    Elemento<T>* pProx;
-
-public:
-    Elemento() : pInfo(nullptr), pProx(nullptr) {}
-    ~Elemento() {}
-
-    void incluir(T* p) { pInfo = p; }
-    void setProx(Elemento<T>* pe) { pProx = pe; }
-    Elemento<T>* getProx() const { return pProx; }
-    T* getInfo() const { return pInfo; }
-};
-
-template<typename T>
 class Lista
 {
+public:
+    class Elemento
+    {
+    private:
+        T* pInfo;
+        Elemento* pProx;
+
+    public:
+        Elemento() : pInfo(nullptr), pProx(nullptr) {}
+        ~Elemento() {}
+
+        void incluir(T* p) { pInfo = p; }
+        void setProx(Elemento* pe) 
+        { 
+            pProx = pe; 
+        }
+        Elemento* getProx() const 
+        {
+            return pProx; 
+        }
+        T* getInfo() const 
+        {
+            return pInfo; 
+        }
+    };
+
 private:
-    Elemento<T>* pPrimeiro;
-    Elemento<T>* pUltimo;
+    Elemento* pPrimeiro;
+    Elemento* pUltimo;
     std::size_t tamanho;
+
 public:
     Lista();
     ~Lista();
 
-    Elemento<T>* getPrimeiro() const 
-    { 
-        return pPrimeiro; 
-    }
-    Elemento<T>* getUltimo() const 
+    Elemento* getPrimeiro() const
     {
-        return pUltimo; 
+        return pPrimeiro;
+    }
+    Elemento* getUltimo() const
+    {
+        return pUltimo;
     }
 
     void inserir(T* item);
@@ -60,10 +70,10 @@ Lista<T>::~Lista()
 template<typename T>
 void Lista<T>::limpar()
 {
-    Elemento<T>* cur = pPrimeiro;
+    typename Lista<T>::Elemento* cur = pPrimeiro;
     while (cur)
     {
-        Elemento<T>* nxt = cur->getProx();
+        typename Lista<T>::Elemento* nxt = cur->getProx();
         delete cur;
         cur = nxt;
     }
@@ -74,9 +84,9 @@ void Lista<T>::limpar()
 
 
 template<typename T>
-void Lista<T>::inserir(T* item) 
+void Lista<T>::inserir(T* item)
 {
-    Elemento<T>* e = new Elemento<T>();
+    typename Lista<T>::Elemento* e = new typename Lista<T>::Elemento();
     e->incluir(item);
 
     if (!pPrimeiro)
@@ -94,8 +104,8 @@ void Lista<T>::inserir(T* item)
 template<typename T>
 void Lista<T>::remover(T* item)
 {
-    Elemento<T>* prev = nullptr;
-    Elemento<T>* cur = pPrimeiro;
+    typename Lista<T>::Elemento* prev = nullptr;
+    typename Lista<T>::Elemento* cur = pPrimeiro;
     while (cur)
     {
         if (cur->getInfo() == item)

@@ -6,6 +6,8 @@
 #include "Lista.h"
 #include "Projetil.h" 
 #include "Robo_Senior.h" 
+#include "Jogo.h" 
+#include "Gerenciador_Grafico.h" // Necessario para MUNDO_X_MAX
 
 namespace Fases {
 	Fase::Fase(Jogador* jogador1, Jogador* jogador2)
@@ -15,19 +17,16 @@ namespace Fases {
 		pListaInimigos(nullptr),
 		pListaObstaculos(nullptr),
 		pListaChao(nullptr),
-		pColisoes(nullptr)
+		pColisoes(nullptr),
+		pJogo(nullptr)
 	{
 		if (pJogador1) {
-			pJogador1->setX(3000.0f);
-			pJogador1->setY(120.0f);
-			pJogador1->setPosicaoGrafica(pJogador1->getX(), pJogador1->getY());
+			// Posicao de spawn foi MOVIDA para as classes filhas
 			pJogador1->setAtivo(true);
 		}
 
 		if (pJogador2 && pJogador2->getAtivo()) {
-			pJogador2->setX(100.0f);
-			pJogador2->setY(450.0f);
-			pJogador2->setPosicaoGrafica(pJogador2->getX(), pJogador2->getY());
+			// Posicao de spawn foi MOVIDA para as classes filhas
 		}
 
 		pListaInimigos = new ListaEntidades();
@@ -46,9 +45,15 @@ namespace Fases {
 		limpar();
 	}
 
+	void Fase::setJogo(Jogo* pJ)
+	{
+		pJogo = pJ;
+	}
+
 	void Fase::adicionarJogador2(Jogador* j2)
 	{
 		pJogador2 = j2;
+
 		if (pColisoes) {
 			pColisoes->setJogador2(pJogador2);
 		}
@@ -56,7 +61,7 @@ namespace Fases {
 
 	void Fase::executar()
 	{
-		if (pJogador1) 
+		if (pJogador1)
 		{
 			pJogador1->executar();
 		}
@@ -66,19 +71,19 @@ namespace Fases {
 		{
 			pJogador2->executar();
 		}
-			
 
-		if (pListaInimigos) 
+
+		if (pListaInimigos)
 		{
 			pListaInimigos->executar();
 		}
-			
+
 
 		if (pListaObstaculos) {
 			pListaObstaculos->executar();
 		}
 
-		
+
 		if (pListaChao)
 		{
 			pListaChao->executar();
@@ -93,7 +98,7 @@ namespace Fases {
 
 			if (pListaInimigos)
 			{
-				Elemento<Entidades::Entidade>* curI = pListaInimigos->getPrimeiro();
+				auto curI = pListaInimigos->getPrimeiro();
 				while (curI) {
 					Entidade* pEnt = curI->getInfo();
 					Personagens::Inimigo* inim = dynamic_cast<Personagens::Inimigo*>(pEnt);
@@ -106,7 +111,7 @@ namespace Fases {
 
 			if (pListaObstaculos)
 			{
-				Elemento<Entidades::Entidade>* curO = pListaObstaculos->getPrimeiro();
+				auto curO = pListaObstaculos->getPrimeiro();
 				while (curO) {
 					Entidade* pEnt = curO->getInfo();
 					Obstaculos::Obstaculo* obst = dynamic_cast<Obstaculos::Obstaculo*>(pEnt);
@@ -119,7 +124,7 @@ namespace Fases {
 
 			if (pListaChao)
 			{
-				Elemento<Entidades::Entidade>* curC = pListaChao->getPrimeiro();
+				auto curC = pListaChao->getPrimeiro();
 				while (curC) {
 					Entidade* pEnt = curC->getInfo();
 					Entidades::Chao* chao = dynamic_cast<Entidades::Chao*>(pEnt);
@@ -133,7 +138,7 @@ namespace Fases {
 			if (pJogador1)
 			{
 				ListaEntidades* projJog = pJogador1->getProjeteis();
-				Elemento<Entidades::Entidade>* curPJog = projJog->getPrimeiro();
+				auto curPJog = projJog->getPrimeiro();
 				while (curPJog) {
 					Entidade* p = curPJog->getInfo();
 					if (p->getAtivo()) {
@@ -149,7 +154,7 @@ namespace Fases {
 			if (pJogador2)
 			{
 				ListaEntidades* projJog2 = pJogador2->getProjeteis();
-				Elemento<Entidades::Entidade>* curPJog2 = projJog2->getPrimeiro();
+				auto curPJog2 = projJog2->getPrimeiro();
 				while (curPJog2) {
 					Entidade* p = curPJog2->getInfo();
 					if (p->getAtivo()) {
@@ -164,13 +169,13 @@ namespace Fases {
 
 			if (pListaInimigos)
 			{
-				Elemento<Entidades::Entidade>* curI = pListaInimigos->getPrimeiro();
+				auto curI = pListaInimigos->getPrimeiro();
 				while (curI) {
 					if (curI->getInfo()->getAtivo()) {
 						Personagens::Robo_CEO* robCeo = dynamic_cast<Personagens::Robo_CEO*>(curI->getInfo());
 						if (robCeo) {
 							ListaEntidades* projrobCeo = robCeo->getProjeteis();
-							Elemento<Entidades::Entidade>* curProbCeo = projrobCeo->getPrimeiro();
+							auto curProbCeo = projrobCeo->getPrimeiro();
 							while (curProbCeo) {
 								Entidade* p = curProbCeo->getInfo();
 								if (p->getAtivo()) {
@@ -196,12 +201,20 @@ namespace Fases {
 			pGG->clear();
 			pGG->getJanela()->setView(pGG->getJanela()->getDefaultView());
 			pGG->desenharBackground();
-			if (pJogador1) {
+
+			// verificacao de quem ta ativo pra camera foco
+			if (pJogador1 && pJogador1->getAtivo())
+			{
 				pGG->setCamera(pJogador1);
 			}
+			else if (pJogador2 && pJogador2->getAtivo())
+			{
+				pGG->setCamera(pJogador2);
+			}
+
 			desenharMapa();
 			if (pListaObstaculos) pListaObstaculos->desenhar();
-			
+
 			//chao nao eh desenhado, mapa cuida disso
 
 			if (pJogador1) {
@@ -216,7 +229,7 @@ namespace Fases {
 			if (pListaInimigos)
 			{
 				pListaInimigos->desenhar();
-				Elemento<Entidades::Entidade>* curI = pListaInimigos->getPrimeiro();
+				auto curI = pListaInimigos->getPrimeiro();
 				while (curI) {
 					Entidade* pEnt = curI->getInfo();
 					if (pEnt && pEnt->getAtivo()) {
@@ -269,20 +282,22 @@ namespace Fases {
 		this->criarRoboJunior(pos.x, pos.y);
 	}
 
-	void Fase::criarPlataforma(float x, float y)
+	void Fase::criarPlataforma(float x, float y, int altura)
 	{
 		Gerenciador_Grafico* pGG_local = Ente::getGerenciadorGrafico();
 		if (!pGG_local) return;
 
-		Obstaculos::Plataforma* plat = new Obstaculos::Plataforma(x, y);
+		Obstaculos::Plataforma* plat = new Obstaculos::Plataforma(x, y, altura);
 		plat->setGerenciadorGrafico(pGG_local);
 		pListaObstaculos->inserir(plat);
 	}
 
+	/* Metodo removido
 	void Fase::criarPlataforma(const sf::Vector2f& pos)
 	{
-		this->criarPlataforma(pos.x, pos.y);
+		this->criarPlataforma(pos.x, pos.y, 160);
 	}
+	*/
 
 	void Fase::criarChao(float x, float y)
 	{

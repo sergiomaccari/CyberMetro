@@ -9,15 +9,18 @@ namespace Obstaculos {
     private:
         static const float largura_plataforma;
         static const float altura_plataforma;
-        float null_grav;
+        float yOrigin;
+        float amplitude;
+        static const float VELOCIDADE_FLUTUACAO;
 
     public:
-        Plataforma(float xi, float yi);
+        Plataforma(float xi, float yi, int alt = 64);
         ~Plataforma();
 
         void obstaculizar(Jogador* pj);
         void salvar();
         void executar();
-        void anti_grav();
+
+
     };
 }

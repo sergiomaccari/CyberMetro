@@ -69,9 +69,6 @@
     <ClInclude Include="Robo_Senior.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="mapa_teste4.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="tiledmap.tmx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

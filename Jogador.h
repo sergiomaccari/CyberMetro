@@ -18,7 +18,6 @@ namespace Personagens
         sf::Time stun;
         sf::Time obstaculoCooldown;
 
-
     public:
         Jogador(int numJogador);
         Jogador(int numJogador, float xi, float yi);
@@ -30,7 +29,6 @@ namespace Personagens
         void setEstaNoChao(bool noChao);
         ListaEntidades* getProjeteis();
         void trava_mov(float t);
-
         void iniciarObstaculoCooldown(sf::Time duracao);
         sf::Time getObstaculoCooldown() const;
     };

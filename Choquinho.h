@@ -11,8 +11,7 @@ namespace Obstaculos {
 
 	public:
 		Choquinho(float xi, float yi);
-		virtual ~Choquinho();
-
+		~Choquinho();
 		virtual void obstaculizar(Jogador* pj);
 		virtual void salvar();
 		virtual void executar();

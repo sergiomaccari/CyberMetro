@@ -1,8 +1,9 @@
 #pragma once
 #include "Jogador.h"
-#include "FasePrimeira.h"
-#include "FaseSegunda.h"
 #include "Menu.h" 
+namespace Fases {
+    class Fase;
+}
 
 class Jogo
 {

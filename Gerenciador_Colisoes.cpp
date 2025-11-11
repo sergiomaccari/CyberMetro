@@ -224,7 +224,8 @@ namespace Gerenciadores
 		{
 			Obstaculos::Obstaculo* obstA = *it_A;
 
-			if (!obstA || !obstA->getAtivo() || !obstA->getMovel())
+			// verificacao de getMovel() removida
+			if (!obstA || !obstA->getAtivo())
 				continue;
 
 			for (auto it_B = LOs.begin(); it_B != LOs.end(); ++it_B)
@@ -339,6 +340,7 @@ namespace Gerenciadores
 				Entidades::Projetil* proj = *it_proj;
 				if (proj->getAtivo() && !proj->getDoBem() && verificarColisao(p1, proj))
 				{
+
 					p1->operator--();
 					proj->setAtivo(false);
 				}
@@ -600,7 +602,8 @@ namespace Gerenciadores
 		for (auto it_obst = LOs.begin(); it_obst != LOs.end(); ++it_obst)
 		{
 			Obstaculos::Obstaculo* obst = *it_obst;
-			if (obst && obst->getFigura() && obst->getAtivo() && obst->getMovel())
+			// verificacao de getMovel() removida
+			if (obst && obst->getFigura() && obst->getAtivo())
 			{
 				sf::FloatRect boundsO = obst->getFigura()->getGlobalBounds();
 
@@ -625,7 +628,7 @@ namespace Gerenciadores
 						{
 							if (boundsO.left < boundsC.left)
 								obst->setX(boundsC.left - boundsO.width);
-							else 
+							else
 								obst->setX(boundsC.left + boundsC.width);
 						}
 						obst->setPosicaoGrafica(obst->getX(), obst->getY());

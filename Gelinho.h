@@ -9,7 +9,7 @@ namespace Obstaculos {
         float largura;
     public:
         Gelinho(float xi, float yi);
-        virtual ~Gelinho();
+        ~Gelinho();
         virtual void obstaculizar(Jogador* pj);
         virtual void salvar();
         virtual void executar();

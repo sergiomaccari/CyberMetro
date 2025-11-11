@@ -3,8 +3,7 @@
 namespace Obstaculos
 {
 	Obstaculo::Obstaculo(float xi, float yi) :
-		danoso(false),
-		isMovel(false)
+		danoso(false)
 	{
 		this->x = xi;
 		this->y = yi;
@@ -16,8 +15,4 @@ namespace Obstaculos
 		return danoso;
 	}
 
-	bool Obstaculo::getMovel() const
-	{
-		return isMovel;
-	}
 }

@@ -9,11 +9,12 @@ namespace Personagens {
         int tamanho;
         sf::Clock tempoCura;
         sf::Time intervaloCura;
+        bool estaNoChao;
+        static const float ALTURA_PULO;
+        static const float FORCA_PULO;
 
     protected:
-        int volta;
         float xINI;
-        int ALCANCE;
 
     public:
         Robo_Senior(float xi, float yi);

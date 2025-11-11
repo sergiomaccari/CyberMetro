@@ -39,7 +39,7 @@ void Robo_Junior::mover()
 	sf::Vector2f movimento = sf::Vector2f(0.0f, 0.0f);
 	tempo = clock.restart();
 
-	if (volta == 1 && this->x >= xINI + (int)raio) {
+	if (volta == 1 && this->x >= xINI + 3*(int)raio) {
 		volta = -1;
 	}
 	else if (volta == -1 && this->x <= xINI) {

@@ -15,7 +15,7 @@ public:
     std::size_t size() const;
 
     Lista<Entidades::Entidade>* getLista();
-    Elemento<Entidades::Entidade>* getPrimeiro() const;
+    typename Lista<Entidades::Entidade>::Elemento* getPrimeiro() const;
 
     void executar();
     void desenhar();

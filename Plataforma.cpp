@@ -1,5 +1,6 @@
 ﻿#include "Plataforma.h"
 #include <iostream>
+#include <cmath> // Para std::sin, que eh o seno
 
 using namespace Personagens;
 
@@ -7,9 +8,14 @@ namespace Obstaculos {
 
     const float Plataforma::altura_plataforma = 32.0f;
     const float Plataforma::largura_plataforma = 32.0f;
+    const float Plataforma::VELOCIDADE_FLUTUACAO = 1.5f;
 
+ //possivelmente da pra otimizar o movimento mas ok to num grind pica
 
-    Plataforma::Plataforma(float xi, float yi) : Obstaculo(xi, yi), null_grav(0)
+    Plataforma::Plataforma(float xi, float yi, int alt)
+        : Obstaculo(xi, yi),
+        yOrigin(yi), // yi eh o centro
+        amplitude((float)alt-32) // -32 pra nao expremer jogador na parede
     {
         if (pGG)
         {
@@ -17,7 +23,7 @@ namespace Obstaculos {
             if (tex)
             {
                 pFigura->setTexture(*tex);
-                pFigura->setScale(96.0f / tex->getSize().x, 32.0f / tex->getSize().y);
+                pFigura->setScale(32.0f / tex->getSize().x, 32.0f / tex->getSize().y);
             }
         }
         else
@@ -30,7 +36,6 @@ namespace Obstaculos {
         this->y = yi;
         setPosicaoGrafica(this->x, this->y);
         this->danoso = false;
-        this->isMovel = true;
     }
 
     Plataforma::~Plataforma()
@@ -40,7 +45,7 @@ namespace Obstaculos {
 
     void Plataforma::obstaculizar(Jogador* pj)
     {
-		pj->iniciarObstaculoCooldown(sf::seconds(15.0f));
+        pj->iniciarObstaculoCooldown(sf::seconds(15.0f));
     }
 
     void Plataforma::salvar()
@@ -48,17 +53,10 @@ namespace Obstaculos {
 
     }
 
-    void Plataforma::anti_grav()
-    {
-        null_grav -= grav;
-        this->y -= vel_grav;
-    }
-
     void Plataforma::executar()
     {
-        vel_grav += grav;
-        this->y += vel_grav;
-        anti_grav();
+        float tempoTotal = clock.getElapsedTime().asSeconds();
+        this->y = yOrigin + (amplitude * std::sin(tempoTotal * VELOCIDADE_FLUTUACAO));
         setPosicaoGrafica(this->x, this->y);
     }
 
