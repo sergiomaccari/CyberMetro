@@ -11,14 +11,14 @@ ListaEntidades::ListaEntidades() {}
 
 ListaEntidades::~ListaEntidades()
 {
-    auto cur = LEs.getPrimeiro();
-    while (cur)
+    Lista<Entidades::Entidade>::Elemento* atual = LEs.getPrimeiro();
+    while (atual)
     {
-        if (cur->getInfo())
+        if (atual->getInfo())
         {
-            delete cur->getInfo();
+            delete atual->getInfo();
         }
-        cur = cur->getProx();
+        atual = atual->getProx();
     }
 }
 
@@ -48,11 +48,12 @@ typename Lista<Entidades::Entidade>::Elemento* ListaEntidades::getPrimeiro() con
 
 void ListaEntidades::executar()
 {
-    auto cur = LEs.getPrimeiro();
-    while (cur)
+    Lista<Entidades::Entidade>::Elemento* atual = LEs.getPrimeiro();
+    while (atual)
     {
-        Entidade* pEnt = cur->getInfo();
-        auto proximo = cur->getProx();
+        Entidade* pEnt = atual->getInfo();
+
+        Lista<Entidades::Entidade>::Elemento* proximo = atual->getProx();
         if (pEnt->getAtivo() == false)
         {
             LEs.remover(pEnt);
@@ -63,16 +64,16 @@ void ListaEntidades::executar()
             pEnt->executar();
         }
 
-        cur = proximo;
+        atual = proximo;
     }
 }
 
 void ListaEntidades::desenhar()
 {
-    auto cur = LEs.getPrimeiro();
-    while (cur)
+    Lista<Entidades::Entidade>::Elemento* atual = LEs.getPrimeiro();
+    while (atual)
     {
-        Entidade* pEnt = cur->getInfo();
+        Entidade* pEnt = atual->getInfo();
         if (pEnt && pEnt->getAtivo())
         {
             Entidades::Chao* pChao = dynamic_cast<Entidades::Chao*>(pEnt);
@@ -81,6 +82,6 @@ void ListaEntidades::desenhar()
                 pEnt->desenhar();
             }
         }
-        cur = cur->getProx();
+        atual = atual->getProx();
     }
 }

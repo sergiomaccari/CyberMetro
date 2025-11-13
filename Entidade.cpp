@@ -75,10 +75,15 @@ namespace Entidades
         return vel_grav;
     }
 
-    void Entidade::gravidade(sf::Vector2f* pos)
+    void Entidade::gravitar(sf::Vector2f* pos)
     {
         vel_grav += grav;
         *pos += sf::Vector2f(0.0f, vel_grav);
+    }
+
+    void Entidade::anti_gravitar(sf::Vector2f* pos)
+    {
+
     }
 
     void Entidade::setPosicaoGrafica(const sf::Vector2f& novaPos)

@@ -13,6 +13,8 @@ namespace Entidades
         static const float grav;
         sf::Clock clock;
         sf::Time tempo;
+		//sf::Vector2f movimento;
+
 
     public:
 		Entidade(float xi, float yi);
@@ -30,7 +32,8 @@ namespace Entidades
         virtual bool getAtivo() const;
         void setVel_Grav(float nv);
         float getVel_Grav() const;
-		void gravidade(sf::Vector2f* pos);
+		void gravitar(sf::Vector2f* pos);
+        virtual void anti_gravitar(sf::Vector2f* pos);
         void setPosicaoGrafica(const sf::Vector2f& novaPos); 
     };
 }

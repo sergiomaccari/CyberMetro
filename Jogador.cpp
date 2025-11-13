@@ -80,6 +80,7 @@ namespace Personagens
 		this->estaAtivo = true;
 		this->stun = sf::Time::Zero;
 		this->obstaculoCooldown = sf::Time::Zero;
+		this->pontos = 0;
 
 		atualizarBarraVida();
 	}
@@ -153,7 +154,7 @@ namespace Personagens
 			}
 		}
 
-		Personagem::gravidade(&movimento);
+		Personagem::gravitar(&movimento);
 
 		this->x += movimento.x * tempo.asSeconds() * velocidade;
 		this->y += movimento.y * tempo.asSeconds() * velocidade;
@@ -219,7 +220,8 @@ namespace Personagens
 
 			novoProjetil->setVelocidade(PROJETIL_VELOCIDADE_JOGADOR * ultimaDirecaoX, 0.0f);
 
-			novoProjetil->setDoBem(true);
+			novoProjetil->setIdDono(this->playerNum);
+
 			projeteis.inserir(novoProjetil);
 			cooldown = 120;
 		}
@@ -249,5 +251,18 @@ namespace Personagens
 	sf::Time Jogador::getObstaculoCooldown() const
 	{
 		return obstaculoCooldown;
+	}
+
+
+	void Jogador::adicionarPontos(int p)
+	{
+		if (p > 0) {
+			this->pontos += p;
+		}
+	}
+
+	int Jogador::getPontos() const
+	{
+		return this->pontos;
 	}
 }

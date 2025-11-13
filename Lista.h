@@ -70,12 +70,12 @@ Lista<T>::~Lista()
 template<typename T>
 void Lista<T>::limpar()
 {
-    typename Lista<T>::Elemento* cur = pPrimeiro;
-    while (cur)
+    typename Lista<T>::Elemento* atual = pPrimeiro;
+    while (atual)
     {
-        typename Lista<T>::Elemento* nxt = cur->getProx();
-        delete cur;
-        cur = nxt;
+        typename Lista<T>::Elemento* prox = atual->getProx();
+        delete atual;
+        atual = prox;
     }
     pPrimeiro = nullptr;
     pUltimo = nullptr;
@@ -105,20 +105,20 @@ template<typename T>
 void Lista<T>::remover(T* item)
 {
     typename Lista<T>::Elemento* prev = nullptr;
-    typename Lista<T>::Elemento* cur = pPrimeiro;
-    while (cur)
+    typename Lista<T>::Elemento* atual = pPrimeiro;
+    while (atual)
     {
-        if (cur->getInfo() == item)
+        if (atual->getInfo() == item)
         {
-            if (prev) prev->setProx(cur->getProx());
-            else pPrimeiro = cur->getProx();
-            if (cur == pUltimo) pUltimo = prev;
-            delete cur;
+            if (prev) prev->setProx(atual->getProx());
+            else pPrimeiro = atual->getProx();
+            if (atual == pUltimo) pUltimo = prev;
+            delete atual;
             --tamanho;
             return;
         }
-        prev = cur;
-        cur = cur->getProx();
+        prev = atual;
+        atual = atual->getProx();
     }
 }
 

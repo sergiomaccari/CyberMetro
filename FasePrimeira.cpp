@@ -5,32 +5,33 @@
 #include "Gelinho.h"
 #include "Choquinho.h"
 #include "Robo_Senior.h"
-#include <algorithm> // para std::swap e std::min
-#include <cstdlib>   // para rand()
+#include <algorithm> 
+#include <cstdlib>   
+#include <functional> 
 
 using json = nlohmann::json;
 using namespace Personagens;
 
 namespace Fases {
-	const int FasePrimeira::MIN_JUNIOR = 3;
-	const int FasePrimeira::MAX_JUNIOR = 5;
-	const int FasePrimeira::MIN_SENIOR = 3;
-	const int FasePrimeira::MAX_SENIOR = 5;
+	const int FasePrimeira::MIN_JUNIOR = 10;
+	const int FasePrimeira::MAX_JUNIOR = 15;
+	const int FasePrimeira::MIN_SENIOR = 8;
+	const int FasePrimeira::MAX_SENIOR = 12;
 	const int FasePrimeira::MIN_PLATAFORMA = 3;
-	const int FasePrimeira::MAX_PLATAFORMA = 5;
-	const int FasePrimeira::MIN_GELINHO = 3;
-	const int FasePrimeira::MAX_GELINHO = 5;
+	const int FasePrimeira::MAX_PLATAFORMA = 4;
+	const int FasePrimeira::MIN_GELINHO = 10;
+	const int FasePrimeira::MAX_GELINHO = 19;
 
 	FasePrimeira::FasePrimeira(Jogador* jogador1, Jogador* jogador2)
 		: Fase(jogador1, jogador2)
 	{
 		if (pJogador1) {
-			pJogador1->resetar(32 * 1, 32 * 24);
+			pJogador1->resetar(32 * 80, 32 * 12);
 		}
 		if (pJogador2 && pJogador2->getAtivo()) {
-			pJogador2->resetar(pJogador1->getX() + 50.0f, pJogador1->getY());
+			pJogador2->resetar(pJogador1->getX(), pJogador1->getY());
 		}
-		this->areaDeSaida = sf::FloatRect(32.0f * 85.0f, 32.0f * 12.0f, 64.0f, 128.0f);
+		this->areaDeSaida = sf::FloatRect(32.0f * 85.0f, 32.0f * 12.0f, 32.0f, 32.0f);
 		this->spriteSaida.setPosition(this->areaDeSaida.left, this->areaDeSaida.top);
 		sf::Vector2u texSize = this->texturaSaida.getSize();
 		if (texSize.x > 0 && texSize.y > 0) {
@@ -102,11 +103,26 @@ namespace Fases {
 			{32 * 98, 32 * 13, (float)(12 * 32)}
 		};
 		posi_gelinho = {
-			{32 * 5, 32 * 2}, {32 * 12, 32 * 2}, {32 * 21, 32 * 2}, {32 * 53, 32 * 2},
-			{32 * 60, 32 * 2}, {32 * 67, 32 * 2}, {32 * 74, 32 * 2}, {32 * 81, 32 * 2},
-			{32 * 88, 32 * 2}, {32 * 9, 32 * 10}, {32 * 22, 32 * 10}, {32 * 53, 32 * 11},
-			{32 * 14, 32 * 24}, {32 * 26, 32 * 24}, {32 * 53, 32 * 24}, {32 * 60, 32 * 24},
-			{32 * 67, 32 * 24}, {32 * 74, 32 * 24}, {32 * 81, 32 * 24}, {32 * 88, 32 * 24},
+			{32 * 5, 32 * 2},
+			{32 * 12, 32 * 2},
+			{32 * 21, 32 * 2},
+			{32 * 53, 32 * 2},
+			{32 * 60, 32 * 2},
+			{32 * 67, 32 * 2},
+			{32 * 74, 32 * 2},
+			{32 * 81, 32 * 2},
+			{32 * 88, 32 * 2},
+			{32 * 9, 32 * 10},
+			{32 * 22, 32 * 10},
+			{32 * 53, 32 * 11},
+			{32 * 14, 32 * 24},
+			{32 * 26, 32 * 24},
+			{32 * 53, 32 * 24},
+			{32 * 60, 32 * 24},
+			{32 * 67, 32 * 24},
+			{32 * 74, 32 * 24},
+			{32 * 81, 32 * 24},
+			{32 * 88, 32 * 24},
 			{32 * 95, 32 * 24}
 		};
 
@@ -128,7 +144,6 @@ namespace Fases {
 			criarRoboJunior(posi_robo_junior[i].x, posi_robo_junior[i].y);
 		}
 
-		// --- LOGICA DE SPAWN ALEATORIO PARA ROBO SENIOR ---
 		int totalPosSeniors = posi_robo_senior.size();
 		int numSeniors = MIN_SENIOR + (rand() % (MAX_SENIOR - MIN_SENIOR + 1));
 		numSeniors = std::min(numSeniors, totalPosSeniors);
@@ -142,7 +157,7 @@ namespace Fases {
 
 	void FasePrimeira::criarObstaculos()
 	{
-		criarMapa();
+		Fase::criarCenario("tiledcyber3.json"); 
 		int totalPosPlataformas = posi_plataforma.size();
 		int numPlataformas = MIN_PLATAFORMA + (rand() % (MAX_PLATAFORMA - MIN_PLATAFORMA + 1));
 		numPlataformas = std::min(numPlataformas, totalPosPlataformas);
@@ -165,51 +180,6 @@ namespace Fases {
 		}
 	}
 
-	void FasePrimeira::criarMapa()
-	{
-		std::ifstream file("tiledcyber3.json");
-		if (!file.is_open()) {
-			std::cerr << "Erro: Nao foi possivel abrir 'tiledcyber3.json'" << std::endl;
-			return;
-		}
-
-		json mapa;
-		file >> mapa;
-		file.close();
-
-		int tileWidth = mapa["tilewidth"];
-		int tileHeight = mapa["tileheight"];
-		int width = mapa["width"];
-		int height = mapa["height"];
-
-		gridMapa.assign(height, std::vector<unsigned int>(width, 0));
-
-		auto data = mapa["layers"][0]["data"];
-		int index = 0;
-		for (int y = 0; y < height; ++y) {
-			for (int x = 0; x < width; ++x) {
-				gridMapa[y][x] = data[index++];
-			}
-		}
-
-		auto vazio = [&](int ry, int rx) {
-			if (ry < 0 || ry >= height || rx < 0 || rx >= width) return true;
-			return gridMapa[ry][rx] == 0;
-			};
-
-		for (int y = 0; y < height; ++y) {
-			for (int x = 0; x < width; ++x) {
-				if (gridMapa[y][x] != 0) {
-					bool borda = vazio(y - 1, x) || vazio(y + 1, x) || vazio(y, x - 1) || vazio(y, x + 1);
-					if (borda) {
-						float posX = x * TAMANHO_BLOCO_X;
-						float posY = y * TAMANHO_BLOCO_Y;
-						Fase::criarChao(posX, posY);
-					}
-				}
-			}
-		}
-	}
 
 	void FasePrimeira::desenharMapa()
 	{

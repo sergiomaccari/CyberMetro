@@ -10,6 +10,11 @@
 #include "Gerenciador_Grafico.h" 
 #include <iostream> 
 #include <SFML/Graphics.hpp>
+#include <fstream>      
+#include <nlohmann/json.hpp> 
+#include <functional>   
+
+using json = nlohmann::json; 
 
 namespace Fases {
 	Fase::Fase(Jogador* jogador1, Jogador* jogador2)
@@ -22,8 +27,10 @@ namespace Fases {
 		pColisoes(nullptr),
 		pJogo(nullptr),
 		areaDeSaida(0.f, 0.f, 0.f, 0.f),
-		terminou(false) // <-- INICIALIZAMOS AQUI
+		terminou(false)
 	{
+		relogioFase.restart();
+
 		if (!texturaSaida.loadFromFile("Imagens/saida.png"))
 		{
 			std::cerr << "Erro: Nao foi possivel carregar Imagens/saida.png" << std::endl;
@@ -63,7 +70,6 @@ namespace Fases {
 
 	void Fase::verificarFimDeFase()
 	{
-		// se ja terminou nao precisa checar de novo
 		if (terminou || areaDeSaida.width == 0 || !pJogo) {
 			return;
 		}
@@ -83,8 +89,7 @@ namespace Fases {
 		}
 
 		if (jogadorTerminou) {
-			// pJogo->voltarAoMenu(); // <-- REMOVEMOS ISSO
-			terminou = true; // <-- ADICIONAMOS ISSO
+			terminou = true;
 		}
 	}
 
@@ -122,97 +127,115 @@ namespace Fases {
 
 			if (pListaInimigos)
 			{
-				auto curI = pListaInimigos->getPrimeiro();
-				while (curI) {
-					Entidade* pEnt = curI->getInfo();
+				Lista<Entidades::Entidade>::Elemento* atualI = pListaInimigos->getPrimeiro();
+				while (atualI) {
+					Entidade* pEnt = atualI->getInfo();
+
+					Personagens::Robo_CEO* robCeo = dynamic_cast<Personagens::Robo_CEO*>(pEnt);
+					if (robCeo && robCeo->getAtivo())
+					{
+						if (pJogador1 && pJogador1->getAtivo())
+						{
+							robCeo->setJogador(pJogador1);
+						}
+						else if (pJogador2 && pJogador2->getAtivo())
+						{
+							robCeo->setJogador(pJogador2);
+						}
+						else
+						{
+							robCeo->setJogador(nullptr);
+						}
+					}
+
 					Personagens::Inimigo* inim = dynamic_cast<Personagens::Inimigo*>(pEnt);
 					if (inim && inim->getAtivo()) {
 						pColisoes->incluirInimigo(inim);
 					}
-					curI = curI->getProx();
+					atualI = atualI->getProx();
 				}
 			}
 
 			if (pListaObstaculos)
 			{
-				auto curO = pListaObstaculos->getPrimeiro();
-				while (curO) {
-					Entidade* pEnt = curO->getInfo();
+				Lista<Entidades::Entidade>::Elemento* atualO = pListaObstaculos->getPrimeiro();
+				while (atualO) {
+					Entidade* pEnt = atualO->getInfo();
 					Obstaculos::Obstaculo* obst = dynamic_cast<Obstaculos::Obstaculo*>(pEnt);
 					if (obst && obst->getAtivo()) {
 						pColisoes->incluirObstaculo(obst);
 					}
-					curO = curO->getProx();
+					atualO = atualO->getProx();
 				}
 			}
 
 			if (pListaChao)
 			{
-				auto curC = pListaChao->getPrimeiro();
-				while (curC) {
-					Entidade* pEnt = curC->getInfo();
+				Lista<Entidades::Entidade>::Elemento* atualC = pListaChao->getPrimeiro();
+				while (atualC) {
+					Entidade* pEnt = atualC->getInfo();
 					Entidades::Chao* chao = dynamic_cast<Entidades::Chao*>(pEnt);
 					if (chao && chao->getAtivo()) {
 						pColisoes->incluirChao(chao);
 					}
-					curC = curC->getProx();
+					atualC = atualC->getProx();
 				}
 			}
 
 			if (pJogador1)
 			{
 				ListaEntidades* projJog = pJogador1->getProjeteis();
-				auto curPJog = projJog->getPrimeiro();
-				while (curPJog) {
-					Entidade* p = curPJog->getInfo();
+				Lista<Entidades::Entidade>::Elemento* atualPJog = projJog->getPrimeiro();
+				while (atualPJog) {
+					Entidade* p = atualPJog->getInfo();
 					if (p->getAtivo()) {
 						Entidades::Projetil* pProj = dynamic_cast<Entidades::Projetil*>(p);
 						if (pProj) {
 							pColisoes->incluirProjetil(pProj);
 						}
 					}
-					curPJog = curPJog->getProx();
+					atualPJog = atualPJog->getProx();
 				}
 			}
 
 			if (pJogador2)
 			{
 				ListaEntidades* projJog2 = pJogador2->getProjeteis();
-				auto curPJog2 = projJog2->getPrimeiro();
-				while (curPJog2) {
-					Entidade* p = curPJog2->getInfo();
+				Lista<Entidades::Entidade>::Elemento* atualPJog2 = projJog2->getPrimeiro();
+				while (atualPJog2) {
+					Entidade* p = atualPJog2->getInfo();
 					if (p->getAtivo()) {
 						Entidades::Projetil* pProj = dynamic_cast<Entidades::Projetil*>(p);
 						if (pProj) {
 							pColisoes->incluirProjetil(pProj);
 						}
 					}
-					curPJog2 = curPJog2->getProx();
+					atualPJog2 = atualPJog2->getProx();
 				}
 			}
 
 			if (pListaInimigos)
 			{
-				auto curI = pListaInimigos->getPrimeiro();
-				while (curI) {
-					if (curI->getInfo()->getAtivo()) {
-						Personagens::Robo_CEO* robCeo = dynamic_cast<Personagens::Robo_CEO*>(curI->getInfo());
+				Lista<Entidades::Entidade>::Elemento* atualI = pListaInimigos->getPrimeiro();
+				while (atualI) {
+					if (atualI->getInfo()->getAtivo()) {
+						Personagens::Robo_CEO* robCeo = dynamic_cast<Personagens::Robo_CEO*>(atualI->getInfo());
 						if (robCeo) {
 							ListaEntidades* projrobCeo = robCeo->getProjeteis();
-							auto curProbCeo = projrobCeo->getPrimeiro();
-							while (curProbCeo) {
-								Entidade* p = curProbCeo->getInfo();
+							Lista<Entidades::Entidade>::Elemento* atualProbCeo = projrobCeo->getPrimeiro();
+							while (atualProbCeo) {
+								Entidade* p = atualProbCeo->getInfo();
 								if (p->getAtivo()) {
 									Entidades::Projetil* pProj = dynamic_cast<Entidades::Projetil*>(p);
 									if (pProj) {
 										pColisoes->incluirProjetil(pProj);
 									}
 								}
-								curProbCeo = curProbCeo->getProx();
+								atualProbCeo = atualProbCeo->getProx();
 							}
 						}
 					}
-					curI = curI->getProx();
+					atualI = atualI->getProx();
 				}
 			}
 
@@ -257,16 +280,16 @@ namespace Fases {
 			if (pListaInimigos)
 			{
 				pListaInimigos->desenhar();
-				auto curI = pListaInimigos->getPrimeiro();
-				while (curI) {
-					Entidade* pEnt = curI->getInfo();
+				Lista<Entidades::Entidade>::Elemento* atualI = pListaInimigos->getPrimeiro();
+				while (atualI) {
+					Entidade* pEnt = atualI->getInfo();
 					if (pEnt && pEnt->getAtivo()) {
 						Personagens::Robo_CEO* robCeo = dynamic_cast<Personagens::Robo_CEO*>(pEnt);
 						if (robCeo) {
 							robCeo->getProjeteis()->desenhar();
 						}
 					}
-					curI = curI->getProx();
+					atualI = atualI->getProx();
 				}
 			}
 		}
@@ -333,13 +356,65 @@ namespace Fases {
 	{
 
 	}
-	void Fase::criarMapa()
-	{
 
+	void Fase::criarCenario(const std::string& arquivoJson) 
+	{
+		std::ifstream file(arquivoJson);
+		if (!file.is_open()) {
+			std::cerr << "Erro: Nao foi possivel abrir '" << arquivoJson << "'" << std::endl;
+			return;
+		}
+
+		json mapa;
+		file >> mapa;
+		file.close();
+
+		int tileWidth = mapa["tilewidth"];
+		int tileHeight = mapa["tileheight"];
+		int width = mapa["width"];
+		int height = mapa["height"];
+
+		gridMapa.assign(height, std::vector<unsigned int>(width, 0));
+
+		json data = mapa["layers"][0]["data"];
+		int index = 0;
+		for (int y = 0; y < height; ++y) {
+			for (int x = 0; x < width; ++x) {
+				gridMapa[y][x] = data[index++];
+			}
+		}
+
+		std::function<bool(int, int)> vazio = [&](int ry, int rx) {
+			if (ry < 0 || ry >= height || rx < 0 || rx >= width) return true;
+			return gridMapa[ry][rx] == 0;
+			};
+
+		for (int y = 0; y < height; ++y) {
+			for (int x = 0; x < width; ++x) {
+				if (gridMapa[y][x] != 0) {
+					bool borda = vazio(y - 1, x) || vazio(y + 1, x) || vazio(y, x - 1) || vazio(y, x + 1);
+					if (borda) {
+						float posX = x * TAMANHO_BLOCO_X;
+						float posY = y * TAMANHO_BLOCO_Y;
+						Fase::criarChao(posX, posY);
+					}
+				}
+			}
+		}
 	}
 
 	bool Fase::getTerminou() const
 	{
 		return terminou;
+	}
+
+	sf::FloatRect Fase::getAreaSaida() const
+	{
+		return areaDeSaida;
+	}
+
+	float Fase::getTempoDecorrido() const
+	{
+		return relogioFase.getElapsedTime().asSeconds();
 	}
 }

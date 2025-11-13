@@ -30,7 +30,7 @@ Gerenciador_Grafico::Gerenciador_Grafico()
 	this->iniciaJanela();
 	if (!texturaBackground.loadFromFile("Imagens/fundo_fixo.png"))
 	{
-		std::cerr << "Erro: Nao foi possivel carregar a textura de fundo." << std::endl;
+		std::cerr << "Erro: nao carregou fundo" << std::endl;
 	}
 	spriteBackground.setTexture(texturaBackground);
 	spriteBackground.setScale(
@@ -45,7 +45,7 @@ Gerenciador_Grafico::~Gerenciador_Grafico()
 
 sf::Texture* Gerenciador_Grafico::getTextura(std::string caminho)
 {
-	auto it = texturas.find(caminho);
+	std::unordered_map<std::string, sf::Texture>::iterator it = texturas.find(caminho);
 	if (it != texturas.end())
 	{
 		return &(it->second);
@@ -54,7 +54,7 @@ sf::Texture* Gerenciador_Grafico::getTextura(std::string caminho)
 	sf::Texture novaTextura;
 	if (!novaTextura.loadFromFile(caminho))
 	{
-		std::cerr << "Erro: Nao foi possivel carregar a textura: " << caminho << std::endl;
+		std::cerr << "Erro nao carregou textura" << caminho << std::endl;
 		return nullptr;
 	}
 

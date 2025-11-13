@@ -9,6 +9,8 @@ using namespace Entidades;
 
 namespace Gerenciadores
 {
+	const float RAIO_CHEKAGEM_QUADRADO = 1225.0f;
+
 	Gerenciador_Colisoes::Gerenciador_Colisoes(Personagens::Jogador* j1) : p1(j1), p2(NULL)
 	{
 	}
@@ -74,9 +76,18 @@ namespace Gerenciadores
 		if (p1 && p1->getFigura() && p1->getAtivo())
 		{
 			sf::FloatRect boundsJ = p1->getFigura()->getGlobalBounds();
-			for (auto it = LOs.begin(); it != LOs.end(); ++it)
+			for (std::list<Obstaculos::Obstaculo*>::iterator it = LOs.begin(); it != LOs.end(); ++it)
 			{
 				Obstaculos::Obstaculo* obst = *it;
+
+				float dx = p1->getX() - obst->getX();
+				float dy = p1->getY() - obst->getY();
+				float distQuadrada = (dx * dx) + (dy * dy);
+				if (distQuadrada > RAIO_CHEKAGEM_QUADRADO)
+				{
+					continue;
+				}
+
 				if (verificarColisao(p1, obst))
 				{
 					sf::FloatRect boundsO = obst->getFigura()->getGlobalBounds();
@@ -90,7 +101,7 @@ namespace Gerenciadores
 							p1->setY(boundsO.top - boundsJ.height);
 						}
 						else
-						{ // colisao baixo
+						{ 
 							p1->setMovimentoY(1.0f);
 							p1->setY(boundsO.top + boundsO.height);
 						}
@@ -117,9 +128,18 @@ namespace Gerenciadores
 		if (p2 && p2->getFigura() && p2->getAtivo())
 		{
 			sf::FloatRect boundsJ = p2->getFigura()->getGlobalBounds();
-			for (auto it = LOs.begin(); it != LOs.end(); ++it)
+			for (std::list<Obstaculos::Obstaculo*>::iterator it = LOs.begin(); it != LOs.end(); ++it)
 			{
 				Obstaculos::Obstaculo* obst = *it;
+
+				float dx = p2->getX() - obst->getX();
+				float dy = p2->getY() - obst->getY();
+				float distQuadrada = (dx * dx) + (dy * dy);
+				if (distQuadrada > RAIO_CHEKAGEM_QUADRADO)
+				{
+					continue;
+				}
+
 				if (verificarColisao(p2, obst))
 				{
 					sf::FloatRect boundsO = obst->getFigura()->getGlobalBounds();
@@ -157,16 +177,25 @@ namespace Gerenciadores
 
 	void Gerenciador_Colisoes::tratarColisoesInimgsObstacs()
 	{
-		for (auto it_inim = LIs.begin(); it_inim != LIs.end(); ++it_inim)
+		for (std::vector<Personagens::Inimigo*>::iterator it_inim = LIs.begin(); it_inim != LIs.end(); ++it_inim)
 		{
 			Personagens::Inimigo* inim = *it_inim;
 			if (inim && inim->getFigura() && inim->getAtivo())
 			{
 				sf::FloatRect boundsI = inim->getFigura()->getGlobalBounds();
 
-				for (auto it_obst = LOs.begin(); it_obst != LOs.end(); ++it_obst)
+				for (std::list<Obstaculos::Obstaculo*>::iterator it_obst = LOs.begin(); it_obst != LOs.end(); ++it_obst)
 				{
 					Obstaculos::Obstaculo* obst = *it_obst;
+
+					float dx = inim->getX() - obst->getX();
+					float dy = inim->getY() - obst->getY();
+					float distQuadrada = (dx * dx) + (dy * dy);
+					if (distQuadrada > RAIO_CHEKAGEM_QUADRADO)
+					{
+						continue;
+					}
+
 					if (verificarColisao(inim, obst))
 					{
 						sf::FloatRect boundsO = obst->getFigura()->getGlobalBounds();
@@ -198,18 +227,27 @@ namespace Gerenciadores
 
 	void Gerenciador_Colisoes::tratarColisoesProjeteisObstacs()
 	{
-		auto it_proj = LPs.begin();
+		std::set<Entidades::Projetil*>::iterator it_proj = LPs.begin();
 		while (it_proj != LPs.end())
 		{
 			Entidades::Projetil* proj = *it_proj;
-			if (!proj->getAtivo()) 
-			{ 
-				++it_proj; continue; 
+			if (!proj->getAtivo())
+			{
+				++it_proj; continue;
 			}
 
-			for (auto it_obst = LOs.begin(); it_obst != LOs.end(); ++it_obst)
+			for (std::list<Obstaculos::Obstaculo*>::iterator it_obst = LOs.begin(); it_obst != LOs.end(); ++it_obst)
 			{
 				Obstaculos::Obstaculo* obst = *it_obst;
+
+				float dx = proj->getX() - obst->getX();
+				float dy = proj->getY() - obst->getY();
+				float distQuadrada = (dx * dx) + (dy * dy);
+				if (distQuadrada > RAIO_CHEKAGEM_QUADRADO)
+				{
+					continue;
+				}
+
 				if (verificarColisao(proj, obst))
 				{
 					proj->setAtivo(false);
@@ -222,18 +260,26 @@ namespace Gerenciadores
 
 	void Gerenciador_Colisoes::tratarColisoesObstacsObstacs()
 	{
-		for (auto it_A = LOs.begin(); it_A != LOs.end(); ++it_A)
+		for (std::list<Obstaculos::Obstaculo*>::iterator it_A = LOs.begin(); it_A != LOs.end(); ++it_A)
 		{
 			Obstaculos::Obstaculo* obstA = *it_A;
 			if (!obstA || !obstA->getAtivo())
 				continue;
 
-			for (auto it_B = LOs.begin(); it_B != LOs.end(); ++it_B)
+			for (std::list<Obstaculos::Obstaculo*>::iterator it_B = LOs.begin(); it_B != LOs.end(); ++it_B)
 			{
 				if (it_A == it_B) continue;
 
 				Obstaculos::Obstaculo* obstB = *it_B;
 				if (!obstB || !obstB->getAtivo()) continue;
+
+				float dx = obstA->getX() - obstB->getX();
+				float dy = obstA->getY() - obstB->getY();
+				float distQuadrada = (dx * dx) + (dy * dy);
+				if (distQuadrada > RAIO_CHEKAGEM_QUADRADO)
+				{
+					continue;
+				}
 
 				if (verificarColisao(obstA, obstB))
 				{
@@ -247,20 +293,20 @@ namespace Gerenciadores
 
 					if (intersection.width > intersection.height)
 					{
-						if (boundsA.top < boundsB.top) //cima
+						if (boundsA.top < boundsB.top)
 						{
 							obstA->setVel_Grav(0);
 							obstA->setY(boundsB.top - boundsA.height);
 							obstA->setPosicaoGrafica(obstA->getX(), obstA->getY());
 						}
-						else //baixo
+						else
 						{
 							obstA->setVel_Grav(0);
 							obstA->setY(boundsB.top + boundsB.height);
 							obstA->setPosicaoGrafica(obstA->getX(), obstA->getY());
 						}
 					}
-					else // lado
+					else
 					{
 						if (boundsA.left < boundsB.left)
 							obstA->setX(boundsB.left - boundsA.width);
@@ -279,10 +325,19 @@ namespace Gerenciadores
 	{
 		if (p1 && p1->getAtivo())
 		{
-			for (auto it_inim = LIs.begin(); it_inim != LIs.end(); ++it_inim)
+			for (std::vector<Personagens::Inimigo*>::iterator it_inim = LIs.begin(); it_inim != LIs.end(); ++it_inim)
 			{
 				Personagens::Inimigo* inim = *it_inim;
 				if (!inim || !inim->getAtivo()) continue;
+
+				float dx = p1->getX() - inim->getX();
+				float dy = p1->getY() - inim->getY();
+				float distQuadrada = (dx * dx) + (dy * dy);
+				if (distQuadrada > RAIO_CHEKAGEM_QUADRADO)
+				{
+					continue;
+				}
+
 				if (verificarColisao(p1, inim))
 				{
 					inim->danificar(p1);
@@ -305,10 +360,19 @@ namespace Gerenciadores
 
 		if (p2 && p2->getAtivo())
 		{
-			for (auto it_inim = LIs.begin(); it_inim != LIs.end(); ++it_inim)
+			for (std::vector<Personagens::Inimigo*>::iterator it_inim = LIs.begin(); it_inim != LIs.end(); ++it_inim)
 			{
 				Personagens::Inimigo* inim = *it_inim;
 				if (!inim || !inim->getAtivo()) continue;
+
+				float dx = p2->getX() - inim->getX();
+				float dy = p2->getY() - inim->getY();
+				float distQuadrada = (dx * dx) + (dy * dy);
+				if (distQuadrada > RAIO_CHEKAGEM_QUADRADO)
+				{
+					continue;
+				}
+
 				if (verificarColisao(p2, inim))
 				{
 					inim->danificar(p2);
@@ -334,11 +398,21 @@ namespace Gerenciadores
 	{
 		if (p1 && p1->getAtivo())
 		{
-			auto it_proj = LPs.begin();
+			std::set<Entidades::Projetil*>::iterator it_proj = LPs.begin();
 			while (it_proj != LPs.end())
 			{
 				Entidades::Projetil* proj = *it_proj;
-				if (proj->getAtivo() && !proj->getDoBem() && verificarColisao(p1, proj))
+
+				float dx = p1->getX() - proj->getX();
+				float dy = p1->getY() - proj->getY();
+				float distQuadrada = (dx * dx) + (dy * dy);
+				if (distQuadrada > RAIO_CHEKAGEM_QUADRADO)
+				{
+					++it_proj; 
+					continue;
+				}
+
+				if (proj->getAtivo() && proj->getIdDono() == 0 && verificarColisao(p1, proj))
 				{
 					for (int i = 0; i < proj->getDano(); i++) {
 						p1->operator--();
@@ -351,11 +425,21 @@ namespace Gerenciadores
 
 		if (p2 && p2->getAtivo())
 		{
-			auto it_proj = LPs.begin();
+			std::set<Entidades::Projetil*>::iterator it_proj = LPs.begin();
 			while (it_proj != LPs.end())
 			{
 				Entidades::Projetil* proj = *it_proj;
-				if (proj->getAtivo() && !proj->getDoBem() && verificarColisao(p2, proj))
+
+				float dx = p2->getX() - proj->getX();
+				float dy = p2->getY() - proj->getY();
+				float distQuadrada = (dx * dx) + (dy * dy);
+				if (distQuadrada > RAIO_CHEKAGEM_QUADRADO)
+				{
+					++it_proj; 
+					continue;
+				}
+
+				if (proj->getAtivo() && proj->getIdDono() == 0 && verificarColisao(p2, proj))
 				{
 					for (int i = 0; i < proj->getDano(); i++) {
 						p2->operator--();
@@ -369,31 +453,52 @@ namespace Gerenciadores
 
 	void Gerenciador_Colisoes::tratarColisoesInimgsProjeteis()
 	{
-		auto it_proj = LPs.begin();
+		std::set<Entidades::Projetil*>::iterator it_proj = LPs.begin();
 		while (it_proj != LPs.end())
 		{
 			Entidades::Projetil* proj = *it_proj;
 
-			if (proj->getAtivo() && proj->getDoBem())
+			if (proj->getAtivo() && proj->getIdDono() > 0)
 			{
-				auto it_inim = LIs.begin();
+				std::vector<Personagens::Inimigo*>::iterator it_inim = LIs.begin();
 				while (it_inim != LIs.end())
 				{
 					Personagens::Inimigo* inim = *it_inim;
-					if (!inim || !inim->getAtivo()) 
+					if (!inim || !inim->getAtivo())
 					{
 						++it_inim;
 						continue;
 					}
 
+					float dx = proj->getX() - inim->getX();
+					float dy = proj->getY() - inim->getY();
+					float distQuadrada = (dx * dx) + (dy * dy);
+					if (distQuadrada > RAIO_CHEKAGEM_QUADRADO)
+					{
+						++it_inim; 
+						continue;
+					}
+
 					if (verificarColisao(proj, inim))
 					{
-						
-						for (int i = 0; i < proj->getDano(); i++) 
+
+						for (int i = 0; i < proj->getDano(); i++)
 						{
 							inim->operator--();
 						}
-						
+
+						if (!inim->getAtivo())
+						{
+							int pontos = inim->getPontosPorMorte();
+
+							if (proj->getIdDono() == 1 && p1) {
+								p1->adicionarPontos(pontos);
+							}
+							else if (proj->getIdDono() == 2 && p2) {
+								p2->adicionarPontos(pontos);
+							}
+						}
+
 						proj->setAtivo(false);
 
 						break;
@@ -410,15 +515,24 @@ namespace Gerenciadores
 
 	void Gerenciador_Colisoes::tratarColisoesInimgsInimgs()
 	{
-		for (auto it_A = LIs.begin(); it_A != LIs.end(); ++it_A)
+		for (std::vector<Personagens::Inimigo*>::iterator it_A = LIs.begin(); it_A != LIs.end(); ++it_A)
 		{
 			Personagens::Inimigo* inimA = *it_A;
-			if (!inimA->getAtivo()) continue;
+			if (!inimA->getAtivo()) {
+				continue;
+			}
 
-			for (auto it_B = std::next(it_A); it_B != LIs.end(); ++it_B)
+			for (std::vector<Personagens::Inimigo*>::iterator it_B = std::next(it_A); it_B != LIs.end(); ++it_B)
 			{
 				Personagens::Inimigo* inimB = *it_B;
 				if (!inimB->getAtivo()) continue;
+				float dx = inimA->getX() - inimB->getX();
+				float dy = inimA->getY() - inimB->getY();
+				float distQuadrada = (dx * dx) + (dy * dy);
+				if (distQuadrada > RAIO_CHEKAGEM_QUADRADO)
+				{
+					continue;
+				}
 
 				if (verificarColisao(inimA, inimB))
 				{
@@ -466,9 +580,18 @@ namespace Gerenciadores
 		if (p1 && p1->getFigura() && p1->getAtivo())
 		{
 			sf::FloatRect boundsJ = p1->getFigura()->getGlobalBounds();
-			for (auto it = LCs.begin(); it != LCs.end(); ++it)
+			for (std::list<Entidades::Chao*>::iterator it = LCs.begin(); it != LCs.end(); ++it)
 			{
 				Entidades::Chao* chao = *it;
+
+				float dx = p1->getX() - chao->getX();
+				float dy = p1->getY() - chao->getY();
+				float distQuadrada = (dx * dx) + (dy * dy);
+				if (distQuadrada > RAIO_CHEKAGEM_QUADRADO)
+				{
+					continue;
+				}
+
 				if (verificarColisao(p1, chao))
 				{
 					sf::FloatRect boundsC = chao->getFigura()->getGlobalBounds();
@@ -507,9 +630,17 @@ namespace Gerenciadores
 		if (p2 && p2->getFigura() && p2->getAtivo())
 		{
 			sf::FloatRect boundsJ = p2->getFigura()->getGlobalBounds();
-			for (auto it = LCs.begin(); it != LCs.end(); ++it)
+			for (std::list<Entidades::Chao*>::iterator it = LCs.begin(); it != LCs.end(); ++it)
 			{
 				Entidades::Chao* chao = *it;
+				float dx = p2->getX() - chao->getX();
+				float dy = p2->getY() - chao->getY();
+				float distQuadrada = (dx * dx) + (dy * dy);
+				if (distQuadrada > RAIO_CHEKAGEM_QUADRADO)
+				{
+					continue;
+				}
+
 				if (verificarColisao(p2, chao))
 				{
 					sf::FloatRect boundsC = chao->getFigura()->getGlobalBounds();
@@ -546,16 +677,26 @@ namespace Gerenciadores
 
 	void Gerenciador_Colisoes::tratarColisoesInimgsChao()
 	{
-		for (auto it_inim = LIs.begin(); it_inim != LIs.end(); ++it_inim)
+		for (std::vector<Personagens::Inimigo*>::iterator it_inim = LIs.begin(); it_inim != LIs.end(); ++it_inim)
 		{
 			Personagens::Inimigo* inim = *it_inim;
 			if (inim && inim->getFigura() && inim->getAtivo())
 			{
 				sf::FloatRect boundsI = inim->getFigura()->getGlobalBounds();
 
-				for (auto it_chao = LCs.begin(); it_chao != LCs.end(); ++it_chao)
+				for (std::list<Entidades::Chao*>::iterator it_chao = LCs.begin(); it_chao != LCs.end(); ++it_chao)
 				{
 					Entidades::Chao* chao = *it_chao;
+
+					float dx = inim->getX() - chao->getX();
+					float dy = inim->getY() - chao->getY();
+					float distQuadrada = (dx * dx) + (dy * dy);
+					if (distQuadrada > RAIO_CHEKAGEM_QUADRADO)
+					{
+						continue;
+					}
+					// --- FIM DA OTIMIZAÇÃO ---
+
 					if (verificarColisao(inim, chao))
 					{
 						sf::FloatRect boundsC = chao->getFigura()->getGlobalBounds();
@@ -586,18 +727,26 @@ namespace Gerenciadores
 
 	void Gerenciador_Colisoes::tratarColisoesProjeteisChao()
 	{
-		auto it_proj = LPs.begin();
+		std::set<Entidades::Projetil*>::iterator it_proj = LPs.begin();
 		while (it_proj != LPs.end())
 		{
 			Entidades::Projetil* proj = *it_proj;
-			if (!proj->getAtivo()) 
-			{ 
-				++it_proj; continue; 
+			if (!proj->getAtivo())
+			{
+				++it_proj; continue;
 			}
 
-			for (auto it_chao = LCs.begin(); it_chao != LCs.end(); ++it_chao)
+			for (std::list<Entidades::Chao*>::iterator it_chao = LCs.begin(); it_chao != LCs.end(); ++it_chao)
 			{
 				Entidades::Chao* chao = *it_chao;
+				float dx = proj->getX() - chao->getX();
+				float dy = proj->getY() - chao->getY();
+				float distQuadrada = (dx * dx) + (dy * dy);
+				if (distQuadrada > RAIO_CHEKAGEM_QUADRADO)
+				{
+					continue;
+				}
+
 				if (verificarColisao(proj, chao))
 				{
 					proj->setAtivo(false);
@@ -610,16 +759,24 @@ namespace Gerenciadores
 
 	void Gerenciador_Colisoes::tratarColisoesObstacsChao()
 	{
-		for (auto it_obst = LOs.begin(); it_obst != LOs.end(); ++it_obst)
+		for (std::list<Obstaculos::Obstaculo*>::iterator it_obst = LOs.begin(); it_obst != LOs.end(); ++it_obst)
 		{
 			Obstaculos::Obstaculo* obst = *it_obst;
 			if (obst && obst->getFigura() && obst->getAtivo())
 			{
 				sf::FloatRect boundsO = obst->getFigura()->getGlobalBounds();
 
-				for (auto it_chao = LCs.begin(); it_chao != LCs.end(); ++it_chao)
+				for (std::list<Entidades::Chao*>::iterator it_chao = LCs.begin(); it_chao != LCs.end(); ++it_chao)
 				{
 					Entidades::Chao* chao = *it_chao;
+					float dx = obst->getX() - chao->getX();
+					float dy = obst->getY() - chao->getY();
+					float distQuadrada = (dx * dx) + (dy * dy);
+					if (distQuadrada > RAIO_CHEKAGEM_QUADRADO)
+					{
+						continue;
+					}
+
 					if (verificarColisao(obst, chao))
 					{
 						sf::FloatRect boundsC = chao->getFigura()->getGlobalBounds();

@@ -9,9 +9,10 @@ namespace Obstaculos {
     private:
         static const float largura_plataforma;
         static const float altura_plataforma;
-        float yOrigin;
+        float yIni;
         float amplitude;
         static const float VELOCIDADE_FLUTUACAO;
+        static const float IMUNIDADE;
 
     public:
         Plataforma(float xi, float yi, int alt = 64);
@@ -20,6 +21,7 @@ namespace Obstaculos {
         void obstaculizar(Jogador* pj);
         void salvar();
         void executar();
+        virtual void anti_gravitar(sf::Vector2f* pos);
 
 
     };

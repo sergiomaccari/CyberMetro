@@ -15,7 +15,7 @@ namespace Personagens
     {
         // configura a visualizacao das barras
         healthBarFundo.setSize(TAMANHO_BARRA_VIDA);
-        healthBarFundo.setFillColor(sf::Color(100, 0, 0));//vermelho mais escuro que mostra dano (fica legal confia)
+        healthBarFundo.setFillColor(sf::Color(100, 0, 0));//vermelho mais esatualo que mostra dano (fica legal confia)
         healthBarAtual.setSize(TAMANHO_BARRA_VIDA);
         healthBarAtual.setFillColor(sf::Color::Red); // vermelho mais claro pra indicar vida restante
     }
@@ -94,7 +94,7 @@ namespace Personagens
     void Personagem::operator++()
     {
         this->n_vidas++;
-        if (n_vidas > n_vidas_max) n_vidas = n_vidas_max; // limita a cura, mas como so o roboSenior usa podia limitar na função que sera feita pro metodo Curar
+        if (n_vidas > n_vidas_max) n_vidas = n_vidas_max; // limita a atuala, mas como so o roboSenior usa podia limitar na função que sera feita pro metodo Curar
         atualizarBarraVida(); 
     }
 

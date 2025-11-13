@@ -34,7 +34,7 @@ namespace Entidades
 
 	}
 
-	void Chao::executar()//verifica se chao esta iniciado em uma posição válida, testando assim a validade de tile
+	void Chao::executar()
 	{
 		if (!estaAtivo)
 		{
@@ -47,7 +47,6 @@ namespace Entidades
 
 		if (fora_esquerda || fora_direita || fora_cima || fora_baixo)
 		{
-			// Se o bloco de chao estiver fora dos limites, eh desativado para não participar das colisões.
 			this->setAtivo(false);
 		}
 	}

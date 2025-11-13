@@ -2,7 +2,7 @@
 #include "Fase.h"
 #include "Robo_CEO.h"
 #include "Choquinho.h"
-#include <vector> // Necessario
+#include <vector> 
 
 namespace Fases {
     class FaseSegunda : public Fase
@@ -29,7 +29,6 @@ namespace Fases {
         ~FaseSegunda();
         virtual void criarInimigos();
         virtual void criarObstaculos();
-        void criarMapa();
         virtual void desenharMapa();
     };
 }

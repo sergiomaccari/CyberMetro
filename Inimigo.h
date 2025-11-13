@@ -8,7 +8,7 @@ namespace Personagens
     {
     protected:
         int nivel_maldade;
-
+        int pontosPorMorte;
 
     public:
         Inimigo(float xi, float yi);
@@ -17,5 +17,7 @@ namespace Personagens
         virtual void danificar(Jogador* pJogador) = 0;
         virtual void mover() = 0;
         virtual void executar() = 0;
+
+        int getPontosPorMorte() const;
     };
 }

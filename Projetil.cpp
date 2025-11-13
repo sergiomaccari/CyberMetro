@@ -2,8 +2,13 @@
 #include "Gerenciador_Grafico.h"
 
 namespace Entidades
-{//TA FALTAND UTILIZAR DANO
-	Projetil::Projetil() : dano(1), vx(0.0f), vy(0.0f), DoBem(true), FORCA_GRAVIDADE_PROJETIL(-0.0249f) {
+{
+	Projetil::Projetil() :
+		dano(1),
+		vx(0.0f),
+		vy(0.0f),
+		idDono(0), // padrao eh roboceo
+		FORCA_GRAVIDADE_PROJETIL(-0.0249f) {
 
 		if (pGG)
 		{
@@ -28,9 +33,9 @@ namespace Entidades
 		}
 	}
 
-	void Projetil::salvar() 
+	void Projetil::salvar()
 	{
-	
+
 	}
 
 	void Projetil::setVelocidade(float velX, float velY)
@@ -39,15 +44,15 @@ namespace Entidades
 		vy = velY;
 		vel_grav = 0.0f;
 	}
-
-	void Projetil::setDoBem(bool b)
+//agora projetil tem dono com um int pra roboceo, jog1, jog2
+	void Projetil::setIdDono(int id)
 	{
-		DoBem = b;
+		idDono = id;
 	}
 
-	bool Projetil::getDoBem() const
+	int Projetil::getIdDono() const
 	{
-		return DoBem;
+		return idDono;
 	}
 
 	int Projetil::getDano() const

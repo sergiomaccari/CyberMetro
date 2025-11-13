@@ -4,7 +4,7 @@
 #include "Choquinho.h" 
 #include "Robo_Senior.h" 
 #include <vector>  
-#include <SFML/System/Vector3.hpp> // necessario para sf::Vector3f
+#include <SFML/System/Vector3.hpp>
 
 namespace Fases {
     class FasePrimeira : public Fase
@@ -33,7 +33,6 @@ namespace Fases {
         ~FasePrimeira();
         virtual void criarInimigos();
         virtual void criarObstaculos();
-        void criarMapa();
         virtual void desenharMapa();
     };
 }

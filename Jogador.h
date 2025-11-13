@@ -3,8 +3,8 @@
 #include "Projetil.h"
 #include "ListaEntidades.h"
 
-// declaracao antecipada para evitar include circular
-namespace Fases {
+namespace Fases 
+{
     class Fase;
 }
 
@@ -34,7 +34,6 @@ namespace Personagens
         void executar();
         void salvar();
         void atirar();
-        void setEstaNoChao(bool noChao);
         ListaEntidades* getProjeteis();
         void trava_mov(float t);
 
@@ -42,5 +41,8 @@ namespace Personagens
         sf::Time getObstaculoCooldown() const;
 
         void resetar(float posX, float posY);
+        void adicionarPontos(int p);
+
+        int getPontos() const;
     };
 }

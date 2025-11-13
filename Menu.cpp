@@ -25,7 +25,7 @@ void Menu::inicializar()
 
 void Menu::carregarFonte()
 {
-    if (!fonte.loadFromFile("arial.ttf"))
+    if (!fonte.loadFromFile("Pixeboy.ttf"))
     {
         std::cerr << "Nao carregou a fonte" << std::endl;
     }
@@ -48,23 +48,22 @@ void Menu::configurarOpcoes()
     opcoesFase2.clear();
 
     std::vector<std::string> textosPrincipal = { "Fase 1", "Fase 2", "Sair" };
-    for (const auto& str : textosPrincipal) {
+    for (const std::string& str : textosPrincipal) {
         sf::Text texto(str, fonte, TAMANHO_FONTE);
         texto.setFillColor(COR_NORMAL);
         opcoesPrincipal.push_back(texto);
     }
     posicionarTextos(opcoesPrincipal);
+    std::vector<std::string> textosSubmenu = { "Novo Jogo", "Carregar Jogo", "Ranking", "Voltar" };
 
-    std::vector<std::string> textosSubmenu = { "Novo Jogo", "Carregar Jogo", "Voltar" };
-
-    for (const auto& str : textosSubmenu) {
+    for (const std::string& str : textosSubmenu) {
         sf::Text texto(str, fonte, TAMANHO_FONTE);
         texto.setFillColor(COR_NORMAL);
         opcoesFase1.push_back(texto);
     }
     posicionarTextos(opcoesFase1);
 
-    for (const auto& str : textosSubmenu) {
+    for (const std::string& str : textosSubmenu) {
         sf::Text texto(str, fonte, TAMANHO_FONTE);
         texto.setFillColor(COR_NORMAL);
         opcoesFase2.push_back(texto);
@@ -173,7 +172,9 @@ void Menu::processarEntrada(sf::Event& evento)
             }
             else if (selecionado == "Carregar Jogo") {
                 std::cout << "teste Carregar Jogo Fase 1" << std::endl;
-                estadoAtualInterno = EstadoJogo::Jogando;
+            }
+            else if (selecionado == "Ranking") {
+                estadoAtualInterno = EstadoJogo::MostrandoRanking;
             }
             else if (selecionado == "Voltar") {
                 setNivelMenu(MenuNivel::PRINCIPAL, 0);
@@ -185,17 +186,18 @@ void Menu::processarEntrada(sf::Event& evento)
             }
             else if (selecionado == "Carregar Jogo") {
                 std::cout << "teste Carregar Jogo Fase 2" << std::endl;
-                estadoAtualInterno = EstadoJogo::FaseDois;
+            }
+            else if (selecionado == "Ranking") {
+                estadoAtualInterno = EstadoJogo::MostrandoRanking;
             }
             else if (selecionado == "Voltar") {
                 setNivelMenu(MenuNivel::PRINCIPAL, 1);
             }
         }
 
-        // se um estado de jogo foi escolhido, reseta o menu, mas mantem estado para jogo.cpp ver
         if (estadoAtualInterno != EstadoJogo::Menu)
         {
-            setNivelMenu(MenuNivel::PRINCIPAL);
+            // Nao reseta o menu aqui jogo que faz isso
         }
     }
 }
@@ -204,7 +206,6 @@ void Menu::processarEntrada(sf::Event& evento)
 void Menu::desenharOpcoes()
 {
     if (!pGG || !pGG->getJanela()) return;
-    // isso reseta a camera para a visao padrao, sem isso ficaria uma tela preta (acho que o menu eh desenhado fora da tela)
     pGG->getJanela()->setView(pGG->getJanela()->getDefaultView());
 
     pGG->desenharBackground();
@@ -233,7 +234,7 @@ void Menu::desenharOpcoes()
     }
 
     if (!pOpcoesAtuais) return;
-    for (const auto& opcao : *pOpcoesAtuais)
+    for (const sf::Text& opcao : *pOpcoesAtuais)
     {
         pGG->getJanela()->draw(opcao);
     }
@@ -247,5 +248,10 @@ EstadoJogo Menu::getProximoEstado() const
 void Menu::resetarEstadoInterno()
 {
     estadoAtualInterno = EstadoJogo::Menu;
-    setNivelMenu(MenuNivel::PRINCIPAL, 0); // volta para a tela principal
+    setNivelMenu(MenuNivel::PRINCIPAL, 0);
+}
+
+Menu::MenuNivel Menu::getNivelAtual() const
+{
+    return nivelAtual;
 }

@@ -26,5 +26,6 @@ namespace Personagens {
         void salvar();
         void setJogador(Jogador* j);
         ListaEntidades* getProjeteis();
+        void anti_gravitar(sf::Vector2f* pos);
     };
 }

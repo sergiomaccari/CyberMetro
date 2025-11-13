@@ -4,13 +4,10 @@
 #include "Jogador.h"
 #include <vector> 
 #include <SFML/System/Vector3.hpp> 
-#include <SFML/Graphics.hpp> // Necessario para Sprite e Texture
-
 
 using namespace Personagens;
 using namespace Gerenciadores;
 
-// declaracao antecipada para quebrar dependencia circular
 class Jogo;
 
 namespace Fases {
@@ -38,10 +35,9 @@ namespace Fases {
 		std::vector<sf::Vector2f> posi_robo_junior;
 		std::vector<sf::Vector3f> posi_plataforma;
 
-		sf::FloatRect areaDeSaida; // Area de saida da fase
+		sf::FloatRect areaDeSaida; 
 
-		// --- CORRECAO AQUI ---
-		sf::Texture texturaSaida; // <-- Estava como sf::Sprite
+		sf::Texture texturaSaida; 
 		sf::Sprite spriteSaida;
 
 		const int TILESET_LARGURA_EM_BLOCOS = 8;
@@ -57,6 +53,7 @@ namespace Fases {
 		void verificarFimDeFase();
 
 		bool terminou;
+		sf::Clock relogioFase;
 
 	public:
 		Fase(Jogador* jogador1, Jogador* jogador2 = nullptr);
@@ -69,11 +66,13 @@ namespace Fases {
 		virtual void adicionarJogador2(Jogador* j2);
 		virtual void criarInimigos() = 0;
 		virtual void criarObstaculos() = 0;
-		void criarMapa();
+		void criarCenario(const std::string& arquivoJson); 
 		virtual void desenharMapa();
 
 		void setJogo(Jogo* pJ);
 
 		bool getTerminou() const;
+		sf::FloatRect getAreaSaida() const;
+		float getTempoDecorrido() const;
 	};
 }

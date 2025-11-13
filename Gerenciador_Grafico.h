@@ -14,7 +14,6 @@
 #include <iostream>      
 #include <filesystem>
 
-//estudar possibilidade e como colcoar macros como constantes em classes 
 
 #define ALTURA_TELA 900
 #define LARGURA_TELA 1600

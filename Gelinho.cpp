@@ -31,7 +31,7 @@ namespace Obstaculos
         if (pj && pj->getObstaculoCooldown() <= sf::Time::Zero)
         {
             pj->trava_mov(1.0f);
-            pj->iniciarObstaculoCooldown(sf::seconds(1.5 + 2.0f*float(largura))); //1.5 segundos + 2*largura de tempo de congelamento
+            pj->iniciarObstaculoCooldown(sf::seconds(1.5 + 2.0f*float(largura))); 
         }
     }
 

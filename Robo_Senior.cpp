@@ -20,6 +20,8 @@ namespace Personagens {
         this->n_vidas = 2;
         this->n_vidas_max = 2; // define a vida maxima
 
+        this->pontosPorMorte = 200;
+
         if (pGG)
         {
             sf::Texture* tex = pGG->getTextura("Imagens/inimigo_medio.png");
@@ -80,6 +82,13 @@ namespace Personagens {
 
     }
 
+    void Robo_Senior::atualar()
+    {
+        if (this->n_vidas < n_vidas_max) {// definir constante para n vida max e estudar a possibilidade de colcoar isso em uma outra função
+            Personagem::operator++();
+        }
+    }
+
     void Robo_Senior::executar()
     {
         this->mover();
@@ -87,9 +96,7 @@ namespace Personagens {
 
         if (tempoCura.getElapsedTime() > intervaloCura)
         {
-            if (this->n_vidas < 2) {// definir constante para n vida max e estudar a possibilidade de colcoar isso em uma outra função
-                Personagem::operator++();
-            }
+            atualar();
             tempoCura.restart();
         }
     }

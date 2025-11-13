@@ -3,28 +3,32 @@
 
 enum class EstadoJogo {
     Menu,
+    EntrandoNome,
     Jogando,
     FaseDois,
     Pausado,
+    MostrandoRanking, 
     Sair
 };
 
 
 class Menu : public Ente
 {
+public:
+    enum class MenuNivel
+    {
+        PRINCIPAL,
+        FASE1,
+        FASE2
+    };
 private:
     sf::Font fonte;
-
-    // Nivel do menu
-    enum class MenuNivel { PRINCIPAL, FASE1, FASE2 };
     MenuNivel nivelAtual;
 
-    // Vetores de opcoes
     std::vector<sf::Text> opcoesPrincipal;
     std::vector<sf::Text> opcoesFase1;
     std::vector<sf::Text> opcoesFase2;
 
-    // Ponteiro para o vetor ativo
     std::vector<sf::Text>* pOpcoesAtuais;
 
     int indiceOpcaoSelecionada;
@@ -38,7 +42,6 @@ private:
     void carregarFonte();
     void configurarOpcoes();
 
-    // Funcoes auxiliares para o novo menu
     void atualizarDestaque();
     void setNivelMenu(MenuNivel novoNivel, int novoIndice = 0);
     void posicionarTextos(std::vector<sf::Text>& textos);
@@ -54,4 +57,5 @@ public:
     void executar();
     EstadoJogo getProximoEstado() const;
     void resetarEstadoInterno();
+    MenuNivel getNivelAtual() const; 
 };

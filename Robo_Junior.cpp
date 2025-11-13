@@ -12,6 +12,7 @@ Robo_Junior::Robo_Junior(float xi, float yi) : Inimigo(xi, yi), volta(1), raio((
 	this->velocidade = 150.0f;
 	this->n_vidas = 2;
 	this->n_vidas_max = 2;
+	this->pontosPorMorte = 100;
 
 
 	if (pGG)
@@ -41,7 +42,7 @@ void Robo_Junior::mover()
 	sf::Vector2f movimento = sf::Vector2f(0.0f, 0.0f);
 	tempo = clock.restart();
 
-	if (volta == 1 && this->x >= xINI + (int)raio*3) {
+	if (volta == 1 && this->x >= xINI + (int)raio * 3) {
 		volta = -1;
 	}
 	else if (volta == -1 && this->x <= xINI) {
@@ -59,7 +60,7 @@ void Robo_Junior::mover()
 		movimento += sf::Vector2f(-1.0f, 0.f);
 	}
 
-	Personagem::gravidade(&movimento);
+	Personagem::gravitar(&movimento);
 
 	this->x += movimento.x * tempo.asSeconds() * velocidade;
 	this->y += movimento.y * tempo.asSeconds() * velocidade;

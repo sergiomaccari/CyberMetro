@@ -18,6 +18,8 @@ namespace Personagens {
         this->n_vidas = 10;
         this->n_vidas_max = 10;
 
+        this->pontosPorMorte = 500;
+
         if (pGG)
         {
             sf::Texture* tex = pGG->getTextura("Imagens/chefe.png");
@@ -41,6 +43,12 @@ namespace Personagens {
 
     }
 
+   void Robo_CEO::anti_gravitar(sf::Vector2f* pos)
+   {
+	   vel_grav -= 0.0249f;
+	   *pos += sf::Vector2f(0.0f, vel_grav);
+   }
+
     void Robo_CEO::setJogador(Jogador* j)
     {
         this->pJogador = j;
@@ -51,9 +59,8 @@ namespace Personagens {
         sf::Vector2f movimento = sf::Vector2f(0.0f, 0.0f);
         tempo = clock.restart();
 
-        vel_grav += grav + FORCA_GRAVIDADE_CHEFE;
-        movimento += sf::Vector2f(0.0f, vel_grav);
-
+        Entidade::gravitar(&this->movimento);
+        Entidade::anti_gravitar(&this->movimento);
         this->x += movimento.x * tempo.asSeconds() * velocidade;
         this->y += movimento.y * tempo.asSeconds() * velocidade;
 
@@ -96,7 +103,9 @@ namespace Personagens {
         }
 
         p->setVelocidade(vx, vy);
-        p->setDoBem(false);
+
+        p->setIdDono(0);
+
         projeteis.inserir(p);
     }
 

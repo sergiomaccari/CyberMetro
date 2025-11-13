@@ -43,9 +43,9 @@ namespace Obstaculos {
 			for (int i = 0; i < danosidade; i++) {
 				pj->operator--();
 			}
-			pj->trava_mov(1.0f /(float) danosidade); // stun, quanto maior o dano menor o stunt
+			pj->trava_mov(1.0f /(float) danosidade); 
 
-			pj->iniciarObstaculoCooldown(sf::seconds(1.0f));// cooldown
+			pj->iniciarObstaculoCooldown(sf::seconds(1.0f));
 		}
 	}
 

@@ -8,8 +8,9 @@
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
-#include <algorithm> //std::swap e std::min
-#include <cstdlib>//rand()
+#include <algorithm> 
+#include <cstdlib>
+#include <functional> 
 
 using json = nlohmann::json;
 using namespace Personagens;
@@ -36,7 +37,6 @@ namespace Fases {
             pJogador2->resetar(pJogador1->getX() + 50.0f, pJogador1->getY());
         }
 
-        //ATENCION POOKIE, AQUI DEFINE SAÍDA
         this->areaDeSaida = sf::FloatRect(32.0f * 97.0f, 32.0f * 10.0f, 64.0f, 128.0f);
         this->spriteSaida.setPosition(this->areaDeSaida.left, this->areaDeSaida.top);
         sf::Vector2u texSize = this->texturaSaida.getSize();
@@ -174,7 +174,7 @@ namespace Fases {
 
     void FaseSegunda::criarObstaculos()
     {
-        criarMapa();
+        Fase::criarCenario("tiledcyberSeg.json"); 
         int totalPosPlataformas = posi_plataforma.size();
         int numPlataformas = MIN_PLATAFORMA + (rand() % (MAX_PLATAFORMA - MIN_PLATAFORMA + 1));
         numPlataformas = std::min(numPlataformas, totalPosPlataformas);
@@ -198,51 +198,7 @@ namespace Fases {
         }
     }
 
-    void FaseSegunda::criarMapa()
-    {
-        std::ifstream file("tiledcyberSeg.json");
-        if (!file.is_open()) {
-            std::cerr << "Erro: Nao foi possivel abrir 'tiledcyberSeg.json'" << std::endl;
-            return;
-        }
-
-        json mapa;
-        file >> mapa;
-        file.close();
-
-        int tileWidth = mapa["tilewidth"];
-        int tileHeight = mapa["tileheight"];
-        int width = mapa["width"];
-        int height = mapa["height"];
-
-        gridMapa.assign(height, std::vector<unsigned int>(width, 0));
-
-        auto data = mapa["layers"][0]["data"];
-        int index = 0;
-        for (int y = 0; y < height; ++y) {
-            for (int x = 0; x < width; ++x) {
-                gridMapa[y][x] = data[index++];
-            }
-        }
-
-        auto vazio = [&](int ry, int rx) {
-            if (ry < 0 || ry >= height || rx < 0 || rx >= width) return true;
-            return gridMapa[ry][rx] == 0;
-            };
-
-        for (int y = 0; y < height; ++y) {
-            for (int x = 0; x < width; ++x) {
-                if (gridMapa[y][x] != 0) {
-                    bool borda = vazio(y - 1, x) || vazio(y + 1, x) || vazio(y, x - 1) || vazio(y, x + 1);
-                    if (borda) {
-                        float posX = x * TAMANHO_BLOCO_X;
-                        float posY = y * TAMANHO_BLOCO_Y;
-                        Fase::criarChao(posX, posY);
-                    }
-                }
-            }
-        }
-    }
+    
 
     void FaseSegunda::desenharMapa()
     {
@@ -279,7 +235,6 @@ namespace Fases {
 
         Personagens::Robo_CEO* chefe = new Personagens::Robo_CEO(x, y);
         chefe->setGerenciadorGrafico(pGG_local);
-        chefe->setJogador(pJogador1);
         pListaInimigos->inserir(chefe);
     }
 
