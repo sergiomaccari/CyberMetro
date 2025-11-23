@@ -1,3 +1,6 @@
+Fonte:
+Pixeboy, Abas Creative (@abascreative) - Fonte utilizada para menu, UI e apresentação - ttps://www.dafont.com/pixeboy.font
+
 Livros
 The C++ Programming Language, Bjarne Stroustrup - utilizado para dúvidas de sintaxe envolvendo a linguagem C++
 
@@ -31,4 +34,5 @@ Como Criar um Game MENU com C++ e SFML, Terminal Root - Vídeo utilizado como in
 Learn JSON in C++ in 15 Minutes: Complete nlohmann/json Tutorial, Asa - Vídeo utilizado como ajuda para enteder/utilizar a biblioteca json: https://www.youtube.com/watch?v=Sa8bdVogGIo
 #15 - Criando Salvar Jogada, Gege++ - Vídeo utilizado para entender como a mecânica de salvamento deve funcionar e como deve ser feita: https://www.youtube.com/watch?v=72I9pL6xv4M&list=PLR17O9xbTbIBBoL3lli44N8LdZVvg-_uZ&index=17
 State Design - Programming Design Patterns - Ep 16 - C++ Coding, Code, Tech, and Tutorials - Vídeo utilizado para entender lógica para o menu https://www.youtube.com/watch?v=Y3FHNAYeamc
+
 How to load a TiledMap : SFML, Caplitero - Vídeo utilizado para auxílio no uso da ferramenta Tiled, para faser o design da fase: https://www.youtube.com/watch?v=5QjXHqFcl30
