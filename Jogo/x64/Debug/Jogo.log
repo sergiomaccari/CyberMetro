@@ -1,0 +1,16 @@
+﻿  Fase.cpp
+  FasePrimeira.cpp
+  FaseSegunda.cpp
+  Gerenciador_Colisoes.cpp
+C:\CyberMetro-\src\Gerenciador_Colisoes.cpp(643,42): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\CyberMetro-\src\Gerenciador_Colisoes.cpp(694,66): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Inimigo.cpp
+  Jogo.cpp
+C:\CyberMetro-\src\Jogo.cpp(133,70): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  Robo_CEO.cpp
+  Robo_Junior.cpp
+  Robo_Senior.cpp
+  main.cpp
+C:\CyberMetro-\src\main.cpp(6,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Generating Code...
+  Jogo.vcxproj -> C:\CyberMetro-\x64\Debug\Jogo.exe
