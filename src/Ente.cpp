@@ -2,8 +2,8 @@
 #include "Ente.h"
 
 CyberMetro::Gerenciadores::Gerenciador_Grafico* CyberMetro::Ente::pGG = nullptr;//revisar
-//const float CyberMetro::Ente::MAX_DELTA_TIME = 0.1f;
 namespace CyberMetro {
+    int Ente::cont_id = 0;
     sf::Clock Ente::g_clock;
     float Ente::g_dt = 0.0f;
     float Ente::g_tempoTotal = 0.0f;
@@ -23,9 +23,9 @@ namespace CyberMetro {
     }
 
 
-    Ente::Ente() : id(0), pFigura(new sf::Sprite())
+    Ente::Ente() : id(cont_id), pFigura(new sf::Sprite())
     {
-
+        this->id = Ente::cont_id++;
     }
 
     Ente::~Ente()

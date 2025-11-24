@@ -57,7 +57,7 @@ namespace CyberMetro {
 			Fase(Entidades::Personagens::Jogador* jogador1, Entidades::Personagens::Jogador* jogador2 = nullptr);
 			virtual ~Fase();
 
-			virtual void executar() override;
+			virtual void executar();
 			void desenharFase();
 
 			void limpar();

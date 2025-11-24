@@ -52,10 +52,10 @@ namespace CyberMetro {
 
 		sf::Texture* Gerenciador_Grafico::getTextura(std::string caminho)
 		{
-			std::unordered_map<std::string, sf::Texture>::iterator it = texturas.find(caminho);
+			std::unordered_map<std::string, sf::Texture>::iterator it = texturas.find(caminho);//mapa, conceito utilizado
 			if (it != texturas.end())
 			{
-				return &(it->second);
+				return &(it->second);//já tinha carregado essa textura
 			}
 
 			sf::Texture novaTextura;
@@ -69,7 +69,7 @@ namespace CyberMetro {
 			return &texturas[caminho];
 		}
 
-		void Gerenciador_Grafico::desenharBackground()
+		void Gerenciador_Grafico::desenharBackground()//coloca imagem de fundo
 		{
 			if (this->janela)
 			{
@@ -78,15 +78,13 @@ namespace CyberMetro {
 		}
 
 
-		void Gerenciador_Grafico::desenharEnte(const Ente* pe)
+		void Gerenciador_Grafico::desenharEnte(const Ente* pe)//função responsavel por desenhar ente na tela
 		{
 			if (this->janela && pe && pe->getFigura())
 			{
 				this->janela->draw(*(pe->getFigura()));
-
-				const Personagem* pPersonagem = dynamic_cast<const Personagem*>(pe);
-
-				if (pPersonagem && pPersonagem->getAtivo())
+				const Personagem* pPersonagem = dynamic_cast<const Personagem*>(pe);//cast para verificar que é personagem
+				if (pPersonagem && pPersonagem->getAtivo())//se for personagem desenha a barra de vida
 				{
 					this->janela->draw(pPersonagem->getBarraFundo());
 					this->janela->draw(pPersonagem->getBarraAtual());
@@ -106,13 +104,17 @@ namespace CyberMetro {
 				switch (this->ev.type)
 				{
 				case sf::Event::Closed:
+				{
 					this->janela->close();
+				}
 					break;
 
 
 				case sf::Event::KeyPressed:
 					if (this->ev.key.code == sf::Keyboard::Escape)
+					{
 						this->janela->close();
+					}
 					break;
 				}
 			}
@@ -127,8 +129,9 @@ namespace CyberMetro {
 
 		void Gerenciador_Grafico::clear()
 		{
-			if (!this->janela) {
-				std::cerr << "erro 3" << std::endl;
+			if (!this->janela) 
+			{
+				std::cerr << "erro 3" << std::endl;//testes
 				return;
 			}
 			this->janela->clear();
@@ -138,7 +141,7 @@ namespace CyberMetro {
 		const bool Gerenciador_Grafico::getJanelaOpen() const
 		{
 			if (!this->janela) {
-				std::cerr << "erro 1" << std::endl;
+				std::cerr << "erro 1" << std::endl;//testes
 				return false;
 			}
 			return this->janela->isOpen();

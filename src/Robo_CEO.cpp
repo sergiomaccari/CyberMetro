@@ -136,8 +136,6 @@ namespace CyberMetro {
 
                 this->forca = data.value("forca", this->forca);
                 this->cooldownTiro = data.value("cooldownTiro", this->cooldownTiro);
-                PROJETIL_VELOCIDADE_CHEFE = 1.2f + 0.06f * (float)forca;
-
                 if (pGG)
                 {
                     sf::Texture* tex = pGG->getTextura("assets/chefe.png");

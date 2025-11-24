@@ -69,6 +69,7 @@ namespace CyberMetro {
         void carregarRanking(const std::string& arquivo, const std::string& titulo);
         void processarInputRanking(sf::Event& evento);
         void desenharRanking();
+        void sortRanking(std::vector<std::string>& nomes, std::vector<int>& pontuacoes);
 
 
     public:

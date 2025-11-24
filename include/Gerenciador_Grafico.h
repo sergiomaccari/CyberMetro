@@ -45,8 +45,6 @@ namespace CyberMetro {
             sf::RenderWindow* janela;
             sf::VideoMode videoMode;
             sf::Event ev;
-            sf::RectangleShape rect;
-            sf::CircleShape cir;
             sf::View camera;
 
             std::unordered_map<std::string, sf::Texture> texturas;

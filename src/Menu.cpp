@@ -9,11 +9,15 @@ namespace CyberMetro {
         nivelAtual(MenuNivel::PRINCIPAL),
         pOpcoesAtuais(nullptr)
     {
+
     }
 
-    Menu::~Menu() {}
+    Menu::~Menu()
+    {
+    
+    }
 
-    void Menu::inicializar()
+    void Menu::inicializar()//define gerenciador grafico e define o estado interno inicial
     {
         if (!pGG) {
             std::cerr << "Gerenciador Grafico (pGG) erro" << std::endl;
@@ -24,7 +28,7 @@ namespace CyberMetro {
         setNivelMenu(MenuNivel::PRINCIPAL);
     }
 
-    void Menu::carregarFonte()
+    void Menu::carregarFonte()//carrega a fonte
     {
         if (!fonte.loadFromFile("PIxeboy.ttf"))
         {
@@ -32,26 +36,30 @@ namespace CyberMetro {
         }
     }
 
-    void Menu::posicionarTextos(std::vector<sf::Text>& textos)
+    void Menu::posicionarTextos(std::vector<sf::Text>& textos)//define as posições do texto
     {
         for (size_t i = 0; i < textos.size(); ++i)
         {
             sf::FloatRect bounds = textos[i].getLocalBounds();
-            textos[i].setOrigin(bounds.left + bounds.width / 2.0f, bounds.top + bounds.height / 2.0f);
-            textos[i].setPosition(LARGURA_TELA / 2.0f, 400.0f + i * 80.0f);
+            textos[i].setOrigin(bounds.left + bounds.width / 2.0f, bounds.top + bounds.height / 2.0f);//coloca na origem de verdade do texto
+            textos[i].setPosition(LARGURA_TELA / 2.0f, 400.0f + i * 80.0f);//seta a posicao do texto para aparecer no ponto do centro
         }
     }
 
     void Menu::configurarOpcoes()
     {
+        //limpa por boas praticas
         opcoesPrincipal.clear();
         opcoesFase1.clear();
         opcoesFase2.clear();
 
-        std::vector<std::string> textosPrincipal = { "Fase 1", "Fase 2", "Carregar Jogo", "Sair" };
 
-        for (const std::string& str : textosPrincipal) {
-            sf::Text texto(str, fonte, TAMANHO_FONTE);
+        //a se guir é posicionado as opões de menu ne submenus corretamente
+
+        std::vector<std::string> textosPrincipal = { "Fase 1", "Fase 2", "Carregar Jogo", "Sair" };//opções de submeno nesse vetor auxilair
+        for (size_t i = 0; i < textosPrincipal.size(); ++i)//seta o lugar do texto corretamente
+        {
+            sf::Text texto(textosPrincipal[i], fonte, TAMANHO_FONTE);
             texto.setFillColor(COR_NORMAL);
             opcoesPrincipal.push_back(texto);
         }
@@ -59,15 +67,17 @@ namespace CyberMetro {
 
         std::vector<std::string> textosSubmenu = { "Novo Jogo", "Ranking", "Voltar" };
 
-        for (const std::string& str : textosSubmenu) {
-            sf::Text texto(str, fonte, TAMANHO_FONTE);
+        for (size_t i = 0; i < textosSubmenu.size(); ++i)
+        {//seta a posição dos textos do submenu
+            sf::Text texto(textosSubmenu[i], fonte, TAMANHO_FONTE);
             texto.setFillColor(COR_NORMAL);
             opcoesFase1.push_back(texto);
         }
         posicionarTextos(opcoesFase1);
 
-        for (const std::string& str : textosSubmenu) {
-            sf::Text texto(str, fonte, TAMANHO_FONTE);
+        for (size_t i = 0; i < textosSubmenu.size(); ++i)
+        {
+            sf::Text texto(textosSubmenu[i], fonte, TAMANHO_FONTE);
             texto.setFillColor(COR_NORMAL);
             opcoesFase2.push_back(texto);
         }
@@ -77,46 +87,55 @@ namespace CyberMetro {
         atualizarDestaque();
     }
 
-    void Menu::setNivelMenu(MenuNivel novoNivel, int novoIndice)
+    void Menu::setNivelMenu(MenuNivel novoNivel, int novoIndice)//contrrola a navegaçao do menu
     {
         nivelAtual = novoNivel;
         indiceOpcaoSelecionada = novoIndice;
 
-        if (nivelAtual == MenuNivel::PRINCIPAL) {
+        if (nivelAtual == MenuNivel::PRINCIPAL) 
+        {
             pOpcoesAtuais = &opcoesPrincipal;
         }
-        else if (nivelAtual == MenuNivel::FASE1) {
+        else if (nivelAtual == MenuNivel::FASE1) 
+        {
             pOpcoesAtuais = &opcoesFase1;
         }
-        else if (nivelAtual == MenuNivel::FASE2) {
+        else if (nivelAtual == MenuNivel::FASE2) 
+        {
             pOpcoesAtuais = &opcoesFase2;
         }
         atualizarDestaque();
     }
 
-    void Menu::atualizarDestaque()
+    void Menu::atualizarDestaque()//muda corzinha de onde o usuario esta podendo selecioanr
     {
         if (!pOpcoesAtuais) return;
-        for (size_t i = 0; i < pOpcoesAtuais->size(); ++i) {
-            (*pOpcoesAtuais)[i].setFillColor((i == indiceOpcaoSelecionada) ? COR_SELECIONADA : COR_NORMAL);
+        for (size_t i = 0; i < pOpcoesAtuais->size(); ++i) 
+        {
+            (*pOpcoesAtuais)[i].setFillColor((i == indiceOpcaoSelecionada) ? COR_SELECIONADA : COR_NORMAL);//amarelo para selecionado e branco para normal
         }
     }
 
 
-    void Menu::moverCima()
+    void Menu::moverCima() //move o seletor do menu pra cima
     {
-        if (!pOpcoesAtuais || pOpcoesAtuais->empty()) return;
-
-        indiceOpcaoSelecionada = (int)((indiceOpcaoSelecionada - 1 + pOpcoesAtuais->size()) % pOpcoesAtuais->size());
+        if (!pOpcoesAtuais || pOpcoesAtuais->empty())
+        {
+            return;
+        }
+        indiceOpcaoSelecionada = (int)((indiceOpcaoSelecionada - 1 + pOpcoesAtuais->size()) % pOpcoesAtuais->size());//operador % para ciclar
 
         atualizarDestaque();
     }
 
-    void Menu::moverBaixo()
+    void Menu::moverBaixo()//move o seletor de menu pra baixo
     {
-        if (!pOpcoesAtuais || pOpcoesAtuais->empty()) return;
+        if (!pOpcoesAtuais || pOpcoesAtuais->empty())
+        {
+			return;
+        }
 
-        indiceOpcaoSelecionada = (int)((indiceOpcaoSelecionada + 1) % pOpcoesAtuais->size());
+        indiceOpcaoSelecionada = (int)((indiceOpcaoSelecionada + 1) % pOpcoesAtuais->size());//operador % para ciclar
 
         atualizarDestaque();
     }
@@ -127,7 +146,7 @@ namespace CyberMetro {
     }
 
 
-    void Menu::processarEntrada(sf::Event& evento)
+    void Menu::processarEntrada(sf::Event& evento)//controlador de eventos. Fica processando input do usuario e definbindo as ações necessarias
     {
         estadoAtualInterno = EstadoJogo::Menu;
 
@@ -139,14 +158,18 @@ namespace CyberMetro {
 
         if (evento.type == sf::Event::KeyPressed)
         {
-            if (evento.key.code == sf::Keyboard::Up) {
+            if (evento.key.code == sf::Keyboard::Up) 
+            {
                 moverCima();
             }
-            else if (evento.key.code == sf::Keyboard::Down) {
+            else if (evento.key.code == sf::Keyboard::Down) 
+            {
                 moverBaixo();
             }
-            else if (evento.key.code == sf::Keyboard::Escape) {
-                if (nivelAtual != MenuNivel::PRINCIPAL) {
+            else if (evento.key.code == sf::Keyboard::Escape) 
+            {
+                if (nivelAtual != MenuNivel::PRINCIPAL) 
+                {
                     setNivelMenu(MenuNivel::PRINCIPAL, (nivelAtual == MenuNivel::FASE1) ? 0 : 1);
                 }
             }
@@ -154,43 +177,58 @@ namespace CyberMetro {
 
         if (evento.type == sf::Event::KeyReleased && evento.key.code == sf::Keyboard::Enter)
         {
-            if (!pOpcoesAtuais) return;
-
+            if (!pOpcoesAtuais)
+            {
+                return;
+            }
+            
             std::string selecionado = (*pOpcoesAtuais)[indiceOpcaoSelecionada].getString();
 
-            if (nivelAtual == MenuNivel::PRINCIPAL) {
-                if (selecionado == "Fase 1") {
+            if (nivelAtual == MenuNivel::PRINCIPAL) 
+            {
+                if (selecionado == "Fase 1")
+                {
                     setNivelMenu(MenuNivel::FASE1);
                 }
-                else if (selecionado == "Fase 2") {
+                else if (selecionado == "Fase 2") 
+                {
                     setNivelMenu(MenuNivel::FASE2);
                 }
-                else if (selecionado == "Carregar Jogo") {
+                else if (selecionado == "Carregar Jogo") 
+                {
                     estadoAtualInterno = EstadoJogo::CarregandoJogo;
                 }
                 else if (selecionado == "Sair") {
                     estadoAtualInterno = EstadoJogo::Sair;
                 }
             }
-            else if (nivelAtual == MenuNivel::FASE1) {
-                if (selecionado == "Novo Jogo") {
+            else if (nivelAtual == MenuNivel::FASE1) 
+            {
+                if (selecionado == "Novo Jogo") 
+                {
                     estadoAtualInterno = EstadoJogo::Jogando;
                 }
-                else if (selecionado == "Ranking") {
+                else if (selecionado == "Ranking") 
+                {
                     estadoAtualInterno = EstadoJogo::MostrandoRanking;
                 }
-                else if (selecionado == "Voltar") {
+                else if (selecionado == "Voltar") 
+                {
                     setNivelMenu(MenuNivel::PRINCIPAL, 0);
                 }
             }
-            else if (nivelAtual == MenuNivel::FASE2) {
-                if (selecionado == "Novo Jogo") {
+            else if (nivelAtual == MenuNivel::FASE2) 
+            {
+                if (selecionado == "Novo Jogo") 
+                {
                     estadoAtualInterno = EstadoJogo::FaseDois;
                 }
-                else if (selecionado == "Ranking") {
+                else if (selecionado == "Ranking") 
+                {
                     estadoAtualInterno = EstadoJogo::MostrandoRanking;
                 }
-                else if (selecionado == "Voltar") {
+                else if (selecionado == "Voltar") 
+                {
                     setNivelMenu(MenuNivel::PRINCIPAL, 1);
                 }
             }
@@ -203,9 +241,13 @@ namespace CyberMetro {
     }
 
 
-    void Menu::desenharOpcoes()
+    void Menu::desenharOpcoes()//desenha coisas do menu
     {
-        if (!pGG || !pGG->getJanela()) return;
+        if (!pGG || !pGG->getJanela())
+        {
+			return;
+        }
+        
         pGG->getJanela()->setView(pGG->getJanela()->getDefaultView());
 
         pGG->desenharBackground();
@@ -221,14 +263,17 @@ namespace CyberMetro {
         subTitulo.setFillColor(sf::Color::Cyan);
 
 
-        if (nivelAtual == MenuNivel::FASE1) {
+        if (nivelAtual == MenuNivel::FASE1) 
+        {
             subTitulo.setString("Fase 1");
         }
-        else if (nivelAtual == MenuNivel::FASE2) {
+        else if (nivelAtual == MenuNivel::FASE2) 
+        {
             subTitulo.setString("Fase 2");
         }
 
-        if (nivelAtual != MenuNivel::PRINCIPAL) {
+        if (nivelAtual != MenuNivel::PRINCIPAL) 
+        {
             sf::FloatRect boundsST = subTitulo.getLocalBounds();
             subTitulo.setOrigin(boundsST.left + boundsST.width / 2.0f, boundsST.top + boundsST.height / 2.0f);
             subTitulo.setPosition(LARGURA_TELA / 2.0f, 300.0f);
@@ -242,12 +287,12 @@ namespace CyberMetro {
         }
     }
 
-    EstadoJogo Menu::getProximoEstado() const
+    EstadoJogo Menu::getProximoEstado() const//retorna proximo estado
     {
         return estadoAtualInterno;
     }
 
-    void Menu::resetarEstadoInterno()
+    void Menu::resetarEstadoInterno()//reseta o estado para o principal que é o inicial
     {
         estadoAtualInterno = EstadoJogo::Menu;
         setNivelMenu(MenuNivel::PRINCIPAL, 0);

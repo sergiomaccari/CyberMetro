@@ -15,6 +15,8 @@ using namespace CyberMetro::Gerenciadores;
 namespace CyberMetro {
 	namespace Fases {
 		
+		//constantes minimo e maximo de obstaculos e inimigos
+
 		const int FasePrimeira::MIN_SENIOR = 3;
 		const int FasePrimeira::MAX_SENIOR = 12;
 		
@@ -25,12 +27,12 @@ namespace CyberMetro {
 			: Fase(jogador1, jogador2)
 		{
 			if (pJogador1) {
-				pJogador1->resetar(32 * 1, 32 * 23);
+				pJogador1->resetar(32 * 1, 32 * 23);//reseta o jogador no começo da fase para a posição adequada
 			}
 			if (pJogador2 && pJogador2->getAtivo()) {
 				pJogador2->resetar(pJogador1->getX(), pJogador1->getY());
 			}
-			this->areaDeSaida = sf::FloatRect(32.0f * 85.0f, 32.0f * 12.0f, 64.0f, 64.0f);
+			this->areaDeSaida = sf::FloatRect(32.0f * 85.0f, 32.0f * 12.0f, 64.0f, 64.0f);//define area de saida
 			this->spriteSaida.setPosition(this->areaDeSaida.left, this->areaDeSaida.top);
 			sf::Vector2u texSize = this->texturaSaida.getSize();
 			if (texSize.x > 0 && texSize.y > 0) {
@@ -41,11 +43,13 @@ namespace CyberMetro {
 			}
 
 
+
 			if (!texturaTileset.loadFromFile("assets/cyberpunk_floor_tiles_256x256_v3.png"))
 			{
 				std::cerr << "Erro: Nao foi possivel carregar o tileset " << std::endl;
 			}
 
+			//posições disponiveis para inimigos spawnnarem a seguir:
 
 			posi_robo_junior = {
 				{32 * 35, 32 * 1},
@@ -135,7 +139,6 @@ namespace CyberMetro {
 
 		void FasePrimeira::criarInimigos()
 		{
-			//int totalPosJuniors = posi_robo_junior.size();
 			int numJuniors = MIN_JUNIOR + (rand() % (MAX_JUNIOR - MIN_JUNIOR + 1));//define numero de entidades
 			numJuniors = std::min(numJuniors, (int)posi_robo_junior.size());//medida anti-cagada
 
@@ -185,25 +188,26 @@ namespace CyberMetro {
 				return;
 			}
 
-			const int tilesetColunas = texturaTileset.getSize().x / (int)TAMANHO_BLOCO_X;
+			const int tilesetColunas = texturaTileset.getSize().x / (int)TAMANHO_BLOCO_X;//numero de colunas de tiles na imagem
 
 			for (int y = 0; y < (int)gridMapa.size(); ++y)
 			{
 				for (int x = 0; x < (int)gridMapa[y].size(); ++x)
 				{
 					unsigned int id = gridMapa[y][x];
-					if (id == 0)
-						continue;
+					if (id == 0)//o criarMapa já leu o arquivo e marcou que aqui é 0 pq n tem nada
+					{
+						continue;//quebra loop
+					}
 
-					int idAjustado = id - 1;
-					int tileX = (idAjustado % tilesetColunas) * (int)TAMANHO_BLOCO_X;
-					int tileY = (idAjustado / tilesetColunas) * (int)TAMANHO_BLOCO_Y;
+					int idAjustado = id - 1;//array começa com 0 e tiled começa com 1
+					int tileX = (idAjustado % tilesetColunas) * (int)TAMANHO_BLOCO_X;//coluna do tile dentro do tile set * tamanho para converter isso em pixels
+					int tileY = (idAjustado / tilesetColunas) * (int)TAMANHO_BLOCO_Y;//esses tileX e Y são o canto superior esquerdo do tile
 
-					sf::Sprite tile(texturaTileset);
-					tile.setTextureRect(sf::IntRect(tileX, tileY, (int)TAMANHO_BLOCO_X, (int)TAMANHO_BLOCO_Y));
-					tile.setPosition(x * TAMANHO_BLOCO_X, y * TAMANHO_BLOCO_Y);
-
-					pGG->getJanela()->draw(tile);
+					sf::Sprite tile(texturaTileset);//cria um sprite 
+					tile.setTextureRect(sf::IntRect(tileX, tileY, (int)TAMANHO_BLOCO_X, (int)TAMANHO_BLOCO_Y));//ajusta pro tile
+					tile.setPosition(x * TAMANHO_BLOCO_X, y * TAMANHO_BLOCO_Y);//coloca no lugar certo
+					pGG->getJanela()->draw(tile);//desenhar o tile
 				}
 			}
 		}

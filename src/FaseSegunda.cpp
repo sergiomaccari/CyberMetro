@@ -18,7 +18,8 @@ using namespace CyberMetro::Gerenciadores;
 namespace CyberMetro {
     namespace Fases {
 
-        
+        //constantes minimo e maximo de obstaculos e inimigos
+
         const int FaseSegunda::MIN_CEO = 3;
         const int FaseSegunda::MAX_CEO = 5;
         
@@ -48,6 +49,8 @@ namespace CyberMetro {
             {
                 std::cerr << "Erro: Nao foi possivel carregar o tileset " << std::endl;
             }
+
+            //posições disponiveis para inimigos spawnnarem a seguir:
 
             posi_ceo = {
                 {3200 - (32 * 10), 32 * 10},
@@ -206,25 +209,27 @@ namespace CyberMetro {
             {
                 return;
             }
-            const int tilesetCols = texturaTileset.getSize().x / (int)TAMANHO_BLOCO_X;
+            const int tilesetCols = texturaTileset.getSize().x / (int)TAMANHO_BLOCO_X;//numero de colunas de tiles na imagem
 
             for (int y = 0; y < (int)gridMapa.size(); ++y)
             {
                 for (int x = 0; x < (int)gridMapa[y].size(); ++x)
                 {
                     unsigned int id = gridMapa[y][x];
-                    if (id == 0)
+                    if (id == 0)//o criarMapa já leu o arquivo e marcou que aqui é 0 pq n tem nada
+                    {
                         continue;
+                    }
+                        
 
-                    int idAjustado = id - 1;
-                    int tileX = (idAjustado % tilesetCols) * (int)TAMANHO_BLOCO_X;
-                    int tileY = (idAjustado / tilesetCols) * (int)TAMANHO_BLOCO_Y;
+                    int idAjustado = id - 1;//array começa com 0 e tiled começa com 1
+                    int tileX = (idAjustado % tilesetCols) * (int)TAMANHO_BLOCO_X;//coluna do tile dentro do tile set * tamanho para converter isso em pixels
+                    int tileY = (idAjustado / tilesetCols) * (int)TAMANHO_BLOCO_Y;//esses tileX e Y são o canto superior esquerdo do tile
 
-                    sf::Sprite tile(texturaTileset);
-                    tile.setTextureRect(sf::IntRect(tileX, tileY, (int)TAMANHO_BLOCO_X, (int)TAMANHO_BLOCO_Y));
-                    tile.setPosition(x * TAMANHO_BLOCO_X, y * TAMANHO_BLOCO_Y);
-
-                    pGG->getJanela()->draw(tile);
+                    sf::Sprite tile(texturaTileset);//cria um sprite 
+                    tile.setTextureRect(sf::IntRect(tileX, tileY, (int)TAMANHO_BLOCO_X, (int)TAMANHO_BLOCO_Y));//ajusta pro tile
+                    tile.setPosition(x * TAMANHO_BLOCO_X, y * TAMANHO_BLOCO_Y);//coloca no lugar certo
+                    pGG->getJanela()->draw(tile);//desenhar o tile
                 }
             }
         }

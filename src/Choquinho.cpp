@@ -8,7 +8,7 @@ namespace CyberMetro {
 			Choquinho::Choquinho(float xi, float yi) : Obstaculo(xi, yi)
 			{
 
-				dano = (rand() % 4) + 1;
+				dano = (rand() % 6) + 10;
 
 				if (pGG)
 				{

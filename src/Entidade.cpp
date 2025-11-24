@@ -90,6 +90,7 @@ namespace CyberMetro {
 
         void Entidade::salvarDataBuffer(json& arq)
         {
+            arq["id"] = this->id;
             arq["x"] = this->x;
             arq["y"] = this->y;
             arq["estaAtivo"] = this->estaAtivo;
@@ -98,6 +99,7 @@ namespace CyberMetro {
 
         void Entidade::carregarDeBuffer(const json& data)
         {
+            this->id = this->id;
             this->x = data.value("x", this->x);
             this->y = data.value("y", this->y);
             this->estaAtivo = data.value("estaAtivo", this->estaAtivo);
