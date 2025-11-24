@@ -1,0 +1,38 @@
+Fonte:
+Pixeboy, Abas Creative (@abascreative) - Fonte utilizada para menu, UI e apresentação - ttps://www.dafont.com/pixeboy.font
+
+Livros
+The C++ Programming Language, Bjarne Stroustrup - utilizado para dúvidas de sintaxe envolvendo a linguagem C++
+
+Projetos diversos:
+Project Simas 2025/2, Programa de Educação Tutorial de Enegnharia de Computação UTFPR - Utilizado diversas vezes para organização do projeto, aprendizado de conteúdos e outros: https://docs.google.com/spreadsheets/d/1-b_hvrXJknL-DQ9NKZYr38fcT6Ozk3sWoJJWat3vCm0/edit?gid=1981086353#gid=1981086353
+Projeto Sistema Acadêmico da matéria Técnicas de Programação, ministrada pelo Professor Dr Jean Marcelo Simão do curso de Engenharia de Computação na UTFPR - Projeto utilizado como referencia para um programa orietnado à objetos: ( disponível no site: https://pessoal.dainf.ct.utfpr.edu.br/jeansimao/ )
+Provas antigas da matéria Técnicas de Programação, ministrada pelo Professor Dr Jean Marcelo Simão do curso de Engenharia de Computação na UTFPR - Algoritmos apresentados nas resoluções de provas fora utilizados para estudo e inspiração no projeto: (disponível no site: https://pessoal.dainf.ct.utfpr.edu.br/jeansimao/)
+
+Projetos de Jogos realizados previamente por alunos veteranos - Todos utilizados como inspiração e como guias para o trabalho:
+As Aventuras do Alienzinho, Rodrigo Yuske Yamauchi e Victor Garret: https://github.com/Yuskeee/Jogo_SFML
+Adventure Time ++ (Project Simas), Isabela Helena Tulio e Jean Carlos do Nascimento Cunha: https://github.com/Nixxye/Project_simas
+Mario++, Felipe Stillner Eufranio e Enzo Holzmann Gaio:	https://github.com/FelipeStillner/MarioMaisMais
+Magic-Worlds, João Pedro da Rocha: https://github.com/Jaum97531/Magic-Worlds
+The Wizard++, Murilo Montalvão e Kauan Godoy Nunes: https://github.com/Lillo-M/TheWizard
+Forest++, Robson Junior e Murilo Kenji Unten: https://github.com/MuriloUnten/Jogo
+Ascent	Edison Furusato Oda e Matheus Dias: https://github.com/0x4D4453/ASCENT.git
+Jogo da Foice Maneira De Vdd, Rafael Fabeni e Willian Pontes: https://github.com/WillianPontes-prog/ProjetoJogoComFoiceManeiraDeVDD/tree/Jurandir
+
+Sites:
+Site do Professor Dr Jean Marcelo Simão - materiais dos sites utilizados para estudar conceitos utilizados no projeto: https://pessoal.dainf.ct.utfpr.edu.br/jeansimao/
+SFML site oficial - Site utilizado para aprender, verificar e estudar diversos aspectos da biblioteca gráfica: https://www.sfml-dev.org/
+Refactoring Guru - Apesar de não realizado os requisitos envolvendo padrões de projeto, o site foi utilizado poara estudá-los e ter um conhecimento e abstração mais profundos sobre o projeto, engenharia de software e programação https://refactoring.guru/
+C++ Enumeration, W3 Schools - Página do site utilizada para entender e aplicar o tipo enum: https://www.w3schools.com/cpp/cpp_enum.asp
+Site do aplicativo Tiled - Site utilizado para aprender a utilizar o aplicativo: https://www.mapeditor.org/
+
+Vídeos e Playlist de Vídeos:
+SFML Tutorials, Suraj Sharma - Playlist utilizada para aprender SFML: https://www.youtube.com/playlist?list=PL6xSOsbVA1eaJnHo_O6uB4qU8LZWzzKdo
+C++ Game Development Tutorials, Andrew Codes Games - Playlist utilizada para aprender SFML:https: //www.youtube.com/playlist?list=PL4Jmh1jbMCDlJppGdSimknQ5YnP1DX_zK
+Game Development in C++ with SFML, Mustafa Sibai - Playlist utilizada para aprender SFML:https: //www.youtube.com/playlist?list=PLs6oRBoE2-Q_fX_rzraQekRoL7Kr7s5xi
+Como Criar um Game MENU com C++ e SFML, Terminal Root - Vídeo utilizado como inspiração e guia para a realização da classe menu: https://www.youtube.com/watch?v=h8-Q4eu3Qt4
+Learn JSON in C++ in 15 Minutes: Complete nlohmann/json Tutorial, Asa - Vídeo utilizado como ajuda para enteder/utilizar a biblioteca json: https://www.youtube.com/watch?v=Sa8bdVogGIo
+#15 - Criando Salvar Jogada, Gege++ - Vídeo utilizado para entender como a mecânica de salvamento deve funcionar e como deve ser feita: https://www.youtube.com/watch?v=72I9pL6xv4M&list=PLR17O9xbTbIBBoL3lli44N8LdZVvg-_uZ&index=17
+State Design - Programming Design Patterns - Ep 16 - C++ Coding, Code, Tech, and Tutorials - Vídeo utilizado para entender lógica para o menu https://www.youtube.com/watch?v=Y3FHNAYeamc
+
+How to load a TiledMap : SFML, Caplitero - Vídeo utilizado para auxílio no uso da ferramenta Tiled, para faser o design da fase: https://www.youtube.com/watch?v=5QjXHqFcl30
